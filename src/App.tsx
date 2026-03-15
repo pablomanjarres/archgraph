@@ -7,6 +7,7 @@ import { LeftSidebar } from "./components/bars/LeftSidebar";
 import { DetailPanel } from "./components/panels/DetailPanel";
 import { useGraphStore } from "./store/useGraphStore";
 import { loadModel } from "./lib/load-model";
+import { useFileWatcher } from "./hooks/useFileWatcher";
 
 export default function App() {
   const setModel = useGraphStore((s) => s.setModel);
@@ -17,6 +18,8 @@ export default function App() {
       .then(setModel)
       .catch((err) => setError(err.message));
   }, [setModel, setError]);
+
+  useFileWatcher();
 
   return (
     <ReactFlowProvider>
