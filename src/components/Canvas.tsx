@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import {
   ReactFlow,
   Background,
@@ -7,6 +7,7 @@ import {
   BackgroundVariant,
   useNodesState,
   useEdgesState,
+  useReactFlow,
   type Node,
   type Edge,
 } from "@xyflow/react";
@@ -24,10 +25,10 @@ export function Canvas() {
   const activeDiagramId = useGraphStore((s) => s.activeDiagramId);
   const selectObject = useGraphStore((s) => s.selectObject);
   const showMinimap = useGraphStore((s) => s.showMinimap);
+  const { fitView } = useReactFlow();
 
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
-  const [layoutDone, setLayoutDone] = useState(false);
 
   const diagram = useMemo(
     () => model?.diagrams.find((d) => d.id === activeDiagramId),
@@ -49,15 +50,15 @@ export function Canvas() {
     if (hasPositions) {
       setNodes(rawNodes);
       setEdges(rawEdges);
-      setLayoutDone(true);
+      requestAnimationFrame(() => fitView({ padding: 0.2 }));
     } else {
       layoutGraph(rawNodes, rawEdges).then((layoutedNodes) => {
         setNodes(layoutedNodes);
         setEdges(rawEdges);
-        setLayoutDone(true);
+        requestAnimationFrame(() => fitView({ padding: 0.2 }));
       });
     }
-  }, [model, diagram, setNodes, setEdges]);
+  }, [model, diagram, setNodes, setEdges, fitView]);
 
   const onNodeClick = useCallback(
     (_: React.MouseEvent, node: Node) => {
@@ -90,8 +91,6 @@ export function Canvas() {
       onPaneClick={onPaneClick}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
-      fitView={layoutDone}
-      fitViewOptions={{ padding: 0.2 }}
       proOptions={{ hideAttribution: true }}
       minZoom={0.1}
       maxZoom={2}
