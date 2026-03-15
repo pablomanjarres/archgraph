@@ -1,0 +1,282 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "projectName": "Nella",
+    "generatedAt": "2026-03-15T00:00:00Z",
+    "generatedBy": "claude-code",
+    "codebaseRoot": "/Users/pablo/Projects/nella-website"
+  },
+  "objects": [
+    {
+      "id": "actor-user",
+      "name": "User",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "End user accessing the Nella platform"
+    },
+    {
+      "id": "actor-agent",
+      "name": "Coding Agent",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "AI coding agent using Nella MCP tools"
+    },
+    {
+      "id": "system-nella",
+      "name": "Nella",
+      "type": "system",
+      "scope": "internal",
+      "status": "live",
+      "description": "AI-powered code intelligence platform"
+    },
+    {
+      "id": "app-www",
+      "name": "Marketing Site",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Next.js marketing website and docs",
+      "parentId": "system-nella",
+      "technologies": [{ "id": "tech-nextjs", "name": "Next.js" }]
+    },
+    {
+      "id": "app-dashboard",
+      "name": "Dashboard",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "User dashboard for managing repos and settings",
+      "parentId": "system-nella",
+      "technologies": [{ "id": "tech-nextjs", "name": "Next.js" }]
+    },
+    {
+      "id": "app-api",
+      "name": "API Server",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Backend API handling indexing and queries",
+      "parentId": "system-nella",
+      "technologies": [{ "id": "tech-ts", "name": "TypeScript" }]
+    },
+    {
+      "id": "app-mcp",
+      "name": "MCP Server",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Model Context Protocol server for AI agents",
+      "parentId": "system-nella",
+      "technologies": [{ "id": "tech-ts", "name": "TypeScript" }]
+    },
+    {
+      "id": "store-supabase",
+      "name": "Supabase DB",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "PostgreSQL database via Supabase",
+      "technologies": [{ "id": "tech-supabase", "name": "Supabase" }],
+      "metadata": { "externalSystem": "Supabase" }
+    },
+    {
+      "id": "store-vector",
+      "name": "Vector Store",
+      "type": "store",
+      "scope": "internal",
+      "status": "live",
+      "description": "Embedding storage for semantic code search",
+      "parentId": "system-nella"
+    },
+    {
+      "id": "system-github",
+      "name": "GitHub",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Source code hosting and OAuth provider"
+    },
+    {
+      "id": "system-openai",
+      "name": "OpenAI",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "LLM and embedding API provider"
+    },
+    {
+      "id": "system-stripe",
+      "name": "Stripe",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Payment processing"
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn-user-www",
+      "sourceId": "actor-user",
+      "targetId": "app-www",
+      "label": "visits",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-user-dash",
+      "sourceId": "actor-user",
+      "targetId": "app-dashboard",
+      "label": "manages repos",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-agent-mcp",
+      "sourceId": "actor-agent",
+      "targetId": "app-mcp",
+      "label": "queries code",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-dash-api",
+      "sourceId": "app-dashboard",
+      "targetId": "app-api",
+      "label": "REST API calls",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-mcp-api",
+      "sourceId": "app-mcp",
+      "targetId": "app-api",
+      "label": "search & context",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-supabase",
+      "sourceId": "app-api",
+      "targetId": "store-supabase",
+      "label": "query",
+      "status": "live",
+      "type": "sync",
+      "technologies": [{ "id": "tech-supabase", "name": "Supabase" }]
+    },
+    {
+      "id": "conn-api-vector",
+      "sourceId": "app-api",
+      "targetId": "store-vector",
+      "label": "semantic search",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-github",
+      "sourceId": "app-api",
+      "targetId": "system-github",
+      "label": "fetch repos",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-openai",
+      "sourceId": "app-api",
+      "targetId": "system-openai",
+      "label": "embeddings",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-dash-stripe",
+      "sourceId": "app-dashboard",
+      "targetId": "system-stripe",
+      "label": "payments",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-dash-github",
+      "sourceId": "app-dashboard",
+      "targetId": "system-github",
+      "label": "OAuth",
+      "status": "live",
+      "type": "sync"
+    }
+  ],
+  "groups": [
+    {
+      "id": "group-frontend",
+      "name": "Frontend",
+      "objectIds": ["app-www", "app-dashboard"]
+    },
+    {
+      "id": "group-backend",
+      "name": "Backend",
+      "objectIds": ["app-api", "app-mcp", "store-vector"]
+    },
+    {
+      "id": "group-external",
+      "name": "External Services",
+      "objectIds": ["store-supabase", "system-github", "system-openai", "system-stripe"]
+    }
+  ],
+  "technologies": [
+    { "id": "tech-nextjs", "name": "Next.js", "color": "#000000", "category": "framework" },
+    { "id": "tech-ts", "name": "TypeScript", "color": "#3178c6", "category": "language" },
+    { "id": "tech-supabase", "name": "Supabase", "color": "#3ecf8e", "category": "database" },
+    { "id": "tech-react", "name": "React", "color": "#61dafb", "category": "framework" }
+  ],
+  "tags": [
+    { "id": "tag-core", "name": "core", "color": "#3b82f6" },
+    { "id": "tag-ai", "name": "ai", "color": "#a855f7" }
+  ],
+  "diagrams": [
+    {
+      "id": "diagram-context",
+      "name": "System Context",
+      "level": 1,
+      "objectIds": [
+        "actor-user", "actor-agent", "system-nella",
+        "store-supabase", "system-github", "system-openai", "system-stripe"
+      ],
+      "connectionIds": [
+        "conn-user-www", "conn-user-dash", "conn-agent-mcp",
+        "conn-api-supabase", "conn-api-github", "conn-api-openai", "conn-dash-stripe"
+      ],
+      "positions": {}
+    },
+    {
+      "id": "diagram-container",
+      "name": "Container Diagram",
+      "level": 2,
+      "objectIds": [
+        "actor-user", "actor-agent",
+        "app-www", "app-dashboard", "app-api", "app-mcp",
+        "store-supabase", "store-vector",
+        "system-github", "system-openai", "system-stripe"
+      ],
+      "connectionIds": [
+        "conn-user-www", "conn-user-dash", "conn-agent-mcp",
+        "conn-dash-api", "conn-mcp-api",
+        "conn-api-supabase", "conn-api-vector",
+        "conn-api-github", "conn-api-openai", "conn-dash-stripe", "conn-dash-github"
+      ],
+      "positions": {}
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow-code-query",
+      "name": "Code Query Flow",
+      "steps": [
+        { "order": 1, "connectionId": "conn-agent-mcp", "description": "Agent sends search query via MCP" },
+        { "order": 2, "connectionId": "conn-mcp-api", "description": "MCP server forwards to API" },
+        { "order": 3, "connectionId": "conn-api-vector", "description": "API performs semantic search" },
+        { "order": 4, "connectionId": "conn-api-supabase", "description": "API fetches metadata from DB" }
+      ]
+    }
+  ]
+}
