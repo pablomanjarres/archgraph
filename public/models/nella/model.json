@@ -515,6 +515,102 @@
       "label": "deployed as nella-api service",
       "status": "live",
       "type": "data"
+    },
+    {
+      "id": "conn-l1-developer-nella",
+      "sourceId": "actor-developer",
+      "targetId": "system-nella",
+      "label": "indexes codebases, configures agents",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-agent-nella",
+      "sourceId": "actor-ai-agent",
+      "targetId": "system-nella",
+      "label": "calls MCP tools for search and context",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-consumer-nella",
+      "sourceId": "actor-api-consumer",
+      "targetId": "system-nella",
+      "label": "sends authenticated REST requests",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-researcher-nella",
+      "sourceId": "actor-researcher",
+      "targetId": "system-nella",
+      "label": "runs agent evaluations",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-nella-supabase",
+      "sourceId": "system-nella",
+      "targetId": "store-supabase",
+      "label": "auth, API keys, context sync",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-nella-cloudsql",
+      "sourceId": "system-nella",
+      "targetId": "store-gcp-cloudsql",
+      "label": "vector embeddings via pgvector",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-nella-redis",
+      "sourceId": "system-nella",
+      "targetId": "store-redis",
+      "label": "rate limiting and job queues",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-nella-openai",
+      "sourceId": "system-nella",
+      "targetId": "system-openai",
+      "label": "generates embeddings",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-nella-voyageai",
+      "sourceId": "system-nella",
+      "targetId": "system-voyageai",
+      "label": "generates code embeddings",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-nella-cohere",
+      "sourceId": "system-nella",
+      "targetId": "system-cohere",
+      "label": "reranks search results",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-nella-anthropic",
+      "sourceId": "system-nella",
+      "targetId": "system-anthropic",
+      "label": "evaluates agents",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-nella-cloudrun",
+      "sourceId": "system-nella",
+      "targetId": "system-gcp-cloudrun",
+      "label": "deployed on Cloud Run",
+      "status": "live",
+      "type": "data"
     }
   ],
   "groups": [
@@ -579,18 +675,18 @@
         "system-gcp-cloudrun"
       ],
       "connectionIds": [
-        "conn-developer-cli",
-        "conn-agent-mcp",
-        "conn-consumer-api",
-        "conn-researcher-benchmark",
-        "conn-core-supabase",
-        "conn-core-cloudsql",
-        "conn-core-openai",
-        "conn-core-voyageai",
-        "conn-core-cohere",
-        "conn-benchmark-anthropic",
-        "conn-benchmark-openai",
-        "conn-api-redis"
+        "conn-l1-developer-nella",
+        "conn-l1-agent-nella",
+        "conn-l1-consumer-nella",
+        "conn-l1-researcher-nella",
+        "conn-l1-nella-supabase",
+        "conn-l1-nella-cloudsql",
+        "conn-l1-nella-redis",
+        "conn-l1-nella-openai",
+        "conn-l1-nella-voyageai",
+        "conn-l1-nella-cohere",
+        "conn-l1-nella-anthropic",
+        "conn-l1-nella-cloudrun"
       ],
       "positions": {}
     },

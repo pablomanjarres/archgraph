@@ -52,11 +52,23 @@ export function Canvas() {
       setEdges(rawEdges);
       requestAnimationFrame(() => fitView({ padding: 0.2 }));
     } else {
-      layoutGraph(rawNodes, rawEdges).then((layoutedNodes) => {
-        setNodes(layoutedNodes);
-        setEdges(rawEdges);
-        requestAnimationFrame(() => fitView({ padding: 0.2 }));
-      });
+      layoutGraph(rawNodes, rawEdges)
+        .then((layoutedNodes) => {
+          setNodes(layoutedNodes);
+          setEdges(rawEdges);
+          requestAnimationFrame(() => fitView({ padding: 0.2 }));
+        })
+        .catch((err) => {
+          console.error("Layout failed, using fallback positions:", err);
+          // Fallback: stack nodes vertically
+          const fallbackNodes = rawNodes.map((node, i) => ({
+            ...node,
+            position: { x: (i % 4) * 300, y: Math.floor(i / 4) * 200 },
+          }));
+          setNodes(fallbackNodes);
+          setEdges(rawEdges);
+          requestAnimationFrame(() => fitView({ padding: 0.2 }));
+        });
     }
   }, [model, diagram, setNodes, setEdges, fitView]);
 

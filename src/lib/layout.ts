@@ -16,34 +16,36 @@ export async function layoutGraph(
   );
 
   // Build flat list first
-  const elkChildren = nodes.map((node) => ({
-    id: node.id,
-    width: node.data.isGroup ? undefined : (node.width ?? DEFAULT_NODE_WIDTH),
-    height: node.data.isGroup
-      ? undefined
-      : (node.height ?? DEFAULT_NODE_HEIGHT),
-    ...(parentIds.has(node.id)
-      ? {
-          layoutOptions: {
-            "elk.padding": `[top=${GROUP_PADDING},left=40,bottom=20,right=40]`,
-          },
-        }
-      : {}),
-    _parentId: node.parentId,
-  }));
+  const elkChildren = nodes.map((node) => {
+    const base: Record<string, unknown> = { id: node.id, _parentId: node.parentId };
+
+    if (!node.data.isGroup) {
+      base.width = node.width ?? DEFAULT_NODE_WIDTH;
+      base.height = node.height ?? DEFAULT_NODE_HEIGHT;
+    }
+
+    if (parentIds.has(node.id)) {
+      base.layoutOptions = {
+        "elk.padding": `[top=${GROUP_PADDING},left=40,bottom=20,right=40]`,
+      };
+    }
+
+    return base;
+  });
 
   // Build hierarchy: group children under parents
-  const childMap = new Map<string, any[]>();
+  const childMap = new Map<string, Record<string, unknown>[]>();
   for (const child of elkChildren) {
-    if (child._parentId) {
-      if (!childMap.has(child._parentId)) childMap.set(child._parentId, []);
-      childMap.get(child._parentId)!.push(child);
+    const pid = child._parentId as string | undefined;
+    if (pid) {
+      if (!childMap.has(pid)) childMap.set(pid, []);
+      childMap.get(pid)!.push(child);
     }
   }
 
   const topLevel = elkChildren.filter((c) => !c._parentId);
   for (const node of elkChildren) {
-    const kids = childMap.get(node.id);
+    const kids = childMap.get(node.id as string);
     if (kids) {
       (node as any).children = kids;
     }
