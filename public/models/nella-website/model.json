@@ -1,0 +1,451 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "projectName": "Nella Website",
+    "generatedAt": "2026-03-15T00:00:00.000Z",
+    "generatedBy": "claude-code",
+    "codebaseRoot": "/Users/pablo/Projects/nella-website"
+  },
+  "objects": [
+    {
+      "id": "actor-developer",
+      "name": "Developer",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Engineers who sign up, create API keys, and use the dashboard playground to test AI coding workflows."
+    },
+    {
+      "id": "actor-team-lead",
+      "name": "Team Lead",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Manages organization settings, invites team members, and handles billing and plan upgrades."
+    },
+    {
+      "id": "actor-visitor",
+      "name": "Visitor",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Prospective users browsing marketing site, pricing, and joining the waitlist."
+    },
+    {
+      "id": "actor-admin",
+      "name": "Admin",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Internal administrators managing users, monitoring system health, and reviewing logs."
+    },
+    {
+      "id": "actor-api-consumer",
+      "name": "API Consumer",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "External applications calling the Nella API with API key authentication for chat and embeddings."
+    },
+    {
+      "id": "system-nella-website",
+      "name": "Nella Website",
+      "type": "system",
+      "scope": "internal",
+      "status": "live",
+      "description": "Turborepo monorepo hosting the dashboard app, marketing site, and documentation — deployed on Vercel.",
+      "technologies": [
+        { "id": "tech-typescript", "name": "TypeScript" },
+        { "id": "tech-react", "name": "React" }
+      ]
+    },
+    {
+      "id": "app-dashboard",
+      "name": "Dashboard App",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "React 19 + Vite SPA at app.getnella.dev — auth, API key management, usage analytics, billing, playground, and admin tools.",
+      "parentId": "system-nella-website",
+      "technologies": [
+        { "id": "tech-react", "name": "React" },
+        { "id": "tech-typescript", "name": "TypeScript" },
+        { "id": "tech-tailwind", "name": "Tailwind CSS" }
+      ]
+    },
+    {
+      "id": "app-api",
+      "name": "Serverless API",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Vercel Functions (Node + Edge runtime) handling auth, orgs, API keys, chat streaming, embeddings, billing webhooks, and admin endpoints.",
+      "parentId": "system-nella-website",
+      "technologies": [
+        { "id": "tech-typescript", "name": "TypeScript" },
+        { "id": "tech-vercel", "name": "Vercel" }
+      ]
+    },
+    {
+      "id": "app-www",
+      "name": "Marketing Site",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Astro 5 static site at www.getnella.dev — landing page, pricing, privacy, terms, and waitlist signup.",
+      "parentId": "system-nella-website",
+      "technologies": [
+        { "id": "tech-astro", "name": "Astro" },
+        { "id": "tech-react", "name": "React" }
+      ]
+    },
+    {
+      "id": "app-docs",
+      "name": "Documentation",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Astro 5 + MDX docs site at docs.getnella.dev with Pagefind search — features, configuration, and API reference.",
+      "parentId": "system-nella-website",
+      "technologies": [
+        { "id": "tech-astro", "name": "Astro" }
+      ]
+    },
+    {
+      "id": "store-supabase",
+      "name": "Supabase",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "Managed PostgreSQL with auth — stores users, organizations, members, projects, API keys, usage logs, and waitlist.",
+      "technologies": [
+        { "id": "tech-supabase", "name": "Supabase" },
+        { "id": "tech-postgresql", "name": "PostgreSQL" }
+      ]
+    },
+    {
+      "id": "system-anthropic",
+      "name": "Anthropic Claude",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Claude API for streaming chat completions in the playground and API endpoints."
+    },
+    {
+      "id": "system-openai",
+      "name": "OpenAI",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Embeddings API for RAG indexing and semantic search features."
+    },
+    {
+      "id": "system-lemonsqueezy",
+      "name": "Lemon Squeezy",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Payment processing for subscriptions and credit packs — handles checkout, webhooks, and customer portal."
+    },
+    {
+      "id": "system-resend",
+      "name": "Resend",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Email delivery for waitlist verification, marketing segments, and transactional emails."
+    },
+    {
+      "id": "system-vercel",
+      "name": "Vercel",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Hosting platform for all three apps — serves static assets, runs serverless functions, and provides CDN/analytics."
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn-developer-dashboard",
+      "sourceId": "actor-developer",
+      "targetId": "app-dashboard",
+      "label": "signs up, manages keys, uses playground",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-teamlead-dashboard",
+      "sourceId": "actor-team-lead",
+      "targetId": "app-dashboard",
+      "label": "manages org, invites members, handles billing",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-visitor-www",
+      "sourceId": "actor-visitor",
+      "targetId": "app-www",
+      "label": "browses marketing, joins waitlist",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-visitor-docs",
+      "sourceId": "actor-visitor",
+      "targetId": "app-docs",
+      "label": "reads documentation",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-admin-dashboard",
+      "sourceId": "actor-admin",
+      "targetId": "app-dashboard",
+      "label": "monitors health, manages users",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-consumer-api",
+      "sourceId": "actor-api-consumer",
+      "targetId": "app-api",
+      "label": "authenticates with API key, calls chat/embeddings",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-dashboard-api",
+      "sourceId": "app-dashboard",
+      "targetId": "app-api",
+      "label": "REST calls for auth, CRUD, streaming",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-www-api",
+      "sourceId": "app-www",
+      "targetId": "app-api",
+      "label": "waitlist signup and verification",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-supabase",
+      "sourceId": "app-api",
+      "targetId": "store-supabase",
+      "label": "queries users, orgs, keys, usage, waitlist",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-dashboard-supabase",
+      "sourceId": "app-dashboard",
+      "targetId": "store-supabase",
+      "label": "authenticates via Supabase Auth SDK",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-anthropic",
+      "sourceId": "app-api",
+      "targetId": "system-anthropic",
+      "label": "streams chat completions from Claude",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-api-openai",
+      "sourceId": "app-api",
+      "targetId": "system-openai",
+      "label": "generates embeddings for RAG indexing",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-lemonsqueezy",
+      "sourceId": "app-api",
+      "targetId": "system-lemonsqueezy",
+      "label": "creates checkouts, manages subscriptions",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-lemonsqueezy-api",
+      "sourceId": "system-lemonsqueezy",
+      "targetId": "app-api",
+      "label": "sends payment webhooks",
+      "status": "live",
+      "type": "event"
+    },
+    {
+      "id": "conn-api-resend",
+      "sourceId": "app-api",
+      "targetId": "system-resend",
+      "label": "sends verification and marketing emails",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-dashboard-vercel",
+      "sourceId": "app-dashboard",
+      "targetId": "system-vercel",
+      "label": "hosted and served via Vercel CDN",
+      "status": "live",
+      "type": "data"
+    },
+    {
+      "id": "conn-www-vercel",
+      "sourceId": "app-www",
+      "targetId": "system-vercel",
+      "label": "hosted as static site",
+      "status": "live",
+      "type": "data"
+    },
+    {
+      "id": "conn-docs-vercel",
+      "sourceId": "app-docs",
+      "targetId": "system-vercel",
+      "label": "hosted with Pagefind search index",
+      "status": "live",
+      "type": "data"
+    }
+  ],
+  "groups": [
+    {
+      "id": "group-frontend",
+      "name": "Frontend",
+      "objectIds": ["app-dashboard", "app-www", "app-docs"]
+    },
+    {
+      "id": "group-backend",
+      "name": "Backend",
+      "objectIds": ["app-api"]
+    },
+    {
+      "id": "group-external",
+      "name": "External Services",
+      "objectIds": ["store-supabase", "system-anthropic", "system-openai", "system-lemonsqueezy", "system-resend", "system-vercel"]
+    }
+  ],
+  "technologies": [
+    { "id": "tech-typescript", "name": "TypeScript", "color": "#3178c6", "category": "language" },
+    { "id": "tech-react", "name": "React", "color": "#61dafb", "category": "framework" },
+    { "id": "tech-astro", "name": "Astro", "color": "#ff5d01", "category": "framework" },
+    { "id": "tech-tailwind", "name": "Tailwind CSS", "color": "#06b6d4", "category": "styling" },
+    { "id": "tech-supabase", "name": "Supabase", "color": "#3ecf8e", "category": "platform" },
+    { "id": "tech-postgresql", "name": "PostgreSQL", "color": "#336791", "category": "database" },
+    { "id": "tech-vercel", "name": "Vercel", "color": "#000000", "category": "platform" }
+  ],
+  "tags": [],
+  "diagrams": [
+    {
+      "id": "diagram-context",
+      "name": "System Context",
+      "level": 1,
+      "objectIds": [
+        "actor-developer",
+        "actor-team-lead",
+        "actor-visitor",
+        "actor-admin",
+        "actor-api-consumer",
+        "system-nella-website",
+        "store-supabase",
+        "system-anthropic",
+        "system-openai",
+        "system-lemonsqueezy",
+        "system-resend",
+        "system-vercel"
+      ],
+      "connectionIds": [
+        "conn-developer-dashboard",
+        "conn-teamlead-dashboard",
+        "conn-visitor-www",
+        "conn-visitor-docs",
+        "conn-admin-dashboard",
+        "conn-consumer-api",
+        "conn-api-supabase",
+        "conn-api-anthropic",
+        "conn-api-openai",
+        "conn-api-lemonsqueezy",
+        "conn-api-resend"
+      ],
+      "positions": {}
+    },
+    {
+      "id": "diagram-container",
+      "name": "Container Diagram",
+      "level": 2,
+      "objectIds": [
+        "actor-developer",
+        "actor-team-lead",
+        "actor-visitor",
+        "actor-admin",
+        "actor-api-consumer",
+        "app-dashboard",
+        "app-api",
+        "app-www",
+        "app-docs",
+        "store-supabase",
+        "system-anthropic",
+        "system-openai",
+        "system-lemonsqueezy",
+        "system-resend",
+        "system-vercel"
+      ],
+      "connectionIds": [
+        "conn-developer-dashboard",
+        "conn-teamlead-dashboard",
+        "conn-visitor-www",
+        "conn-visitor-docs",
+        "conn-admin-dashboard",
+        "conn-consumer-api",
+        "conn-dashboard-api",
+        "conn-www-api",
+        "conn-api-supabase",
+        "conn-dashboard-supabase",
+        "conn-api-anthropic",
+        "conn-api-openai",
+        "conn-api-lemonsqueezy",
+        "conn-lemonsqueezy-api",
+        "conn-api-resend",
+        "conn-dashboard-vercel",
+        "conn-www-vercel",
+        "conn-docs-vercel"
+      ],
+      "positions": {}
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow-signup",
+      "name": "Developer Signup",
+      "steps": [
+        { "order": 1, "connectionId": "conn-developer-dashboard", "description": "Developer visits signup page" },
+        { "order": 2, "connectionId": "conn-dashboard-supabase", "description": "Creates account via Supabase Auth" },
+        { "order": 3, "connectionId": "conn-dashboard-api", "description": "Dashboard calls API to create personal org" },
+        { "order": 4, "connectionId": "conn-api-supabase", "description": "API inserts org and membership rows" }
+      ]
+    },
+    {
+      "id": "flow-chat",
+      "name": "Chat Streaming",
+      "steps": [
+        { "order": 1, "connectionId": "conn-developer-dashboard", "description": "Developer types message in playground" },
+        { "order": 2, "connectionId": "conn-dashboard-api", "description": "POST /api/chat/stream with JWT" },
+        { "order": 3, "connectionId": "conn-api-supabase", "description": "Rate limit and quota check against usage_logs" },
+        { "order": 4, "connectionId": "conn-api-anthropic", "description": "Stream response from Claude API" }
+      ]
+    },
+    {
+      "id": "flow-upgrade",
+      "name": "Plan Upgrade",
+      "steps": [
+        { "order": 1, "connectionId": "conn-developer-dashboard", "description": "Developer clicks Upgrade on billing page" },
+        { "order": 2, "connectionId": "conn-dashboard-api", "description": "POST /api/lemonsqueezy/create-checkout" },
+        { "order": 3, "connectionId": "conn-api-lemonsqueezy", "description": "Creates checkout session on Lemon Squeezy" },
+        { "order": 4, "connectionId": "conn-lemonsqueezy-api", "description": "Payment webhook updates plan in database" },
+        { "order": 5, "connectionId": "conn-api-supabase", "description": "Updates org plan to 'pro'" }
+      ]
+    }
+  ]
+}

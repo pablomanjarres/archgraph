@@ -18,6 +18,7 @@ interface GraphState {
   selectObject: (id: string | null) => void;
   setActiveDiagram: (id: string | null) => void;
   toggleMinimap: () => void;
+  reset: () => void;
 
   // Derived helpers
   getObject: (id: string) => ModelObject | undefined;
@@ -42,6 +43,13 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   selectObject: (id) => set({ selectedObjectId: id }),
   setActiveDiagram: (id) => set({ activeDiagramId: id }),
   toggleMinimap: () => set((s) => ({ showMinimap: !s.showMinimap })),
+  reset: () =>
+    set({
+      model: null,
+      error: null,
+      selectedObjectId: null,
+      activeDiagramId: null,
+    }),
 
   getObject: (id) => get().model?.objects.find((o) => o.id === id),
   getConnectionsFor: (objectId) =>

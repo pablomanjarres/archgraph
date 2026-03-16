@@ -2,8 +2,12 @@ import type { ArchGraphModel } from "../types/model";
 
 const MODEL_PATHS = ["/model.json", "/sample-model.json"];
 
-export async function loadModel(): Promise<ArchGraphModel> {
-  for (const path of MODEL_PATHS) {
+export async function loadModel(projectId?: string): Promise<ArchGraphModel> {
+  const paths = projectId
+    ? [`/models/${projectId}/model.json`]
+    : MODEL_PATHS;
+
+  for (const path of paths) {
     try {
       const res = await fetch(path);
       if (res.ok) {

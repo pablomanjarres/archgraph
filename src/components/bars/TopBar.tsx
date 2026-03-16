@@ -1,7 +1,9 @@
 import { Search, ChevronRight } from "lucide-react";
+import { Link, useParams } from "react-router-dom";
 import { useGraphStore } from "../../store/useGraphStore";
 
 export function TopBar() {
+  const { projectId } = useParams();
   const model = useGraphStore((s) => s.model);
   const activeDiagramId = useGraphStore((s) => s.activeDiagramId);
   const setActiveDiagram = useGraphStore((s) => s.setActiveDiagram);
@@ -12,6 +14,17 @@ export function TopBar() {
     <div className="h-11 border-b border-[#333] bg-[#1e1e1e] flex items-center px-4 gap-3 shrink-0">
       {/* Breadcrumb */}
       <div className="flex items-center gap-1.5 text-sm">
+        {projectId && (
+          <>
+            <Link
+              to="/"
+              className="text-neutral-500 hover:text-neutral-300 transition-colors"
+            >
+              archgraph
+            </Link>
+            <ChevronRight size={14} className="text-neutral-600" />
+          </>
+        )}
         <span className="text-neutral-400">
           {model?.metadata.projectName ?? "archgraph"}
         </span>

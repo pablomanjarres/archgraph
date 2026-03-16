@@ -4,14 +4,16 @@ import { useGraphStore } from "../store/useGraphStore";
 
 const POLL_INTERVAL = 2000;
 
-export function useFileWatcher() {
+export function useFileWatcher(projectId?: string) {
   const setModel = useGraphStore((s) => s.setModel);
   const lastHash = useRef<string>("");
 
   useEffect(() => {
+    if (!import.meta.env.DEV) return;
+
     const interval = setInterval(async () => {
       try {
-        const model = await loadModel();
+        const model = await loadModel(projectId);
         const hash = JSON.stringify(model);
         if (hash !== lastHash.current) {
           lastHash.current = hash;
@@ -23,5 +25,5 @@ export function useFileWatcher() {
     }, POLL_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [setModel]);
+  }, [setModel, projectId]);
 }

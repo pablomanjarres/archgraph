@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/models/:path*", "destination": "/models/:path*" },
+    { "source": "/projects.json", "destination": "/projects.json" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
