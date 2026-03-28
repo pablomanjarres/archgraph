@@ -16,11 +16,16 @@ if (command === "serve") {
   // Parse --model flag for custom model path
   let customModel = null;
   let positionalDir = null;
+  let port = 4321;
   for (let i = 1; i < args.length; i++) {
     if (args[i] === "--model" && i + 1 < args.length) {
       customModel = args[++i];
     } else if (args[i].startsWith("--model=")) {
       customModel = args[i].slice("--model=".length);
+    } else if (args[i] === "--port" && i + 1 < args.length) {
+      port = parseInt(args[++i], 10);
+    } else if (args[i].startsWith("--port=")) {
+      port = parseInt(args[i].slice("--port=".length), 10);
     } else if (!args[i].startsWith("--")) {
       positionalDir = args[i];
     }
@@ -47,7 +52,7 @@ if (command === "serve") {
   const server = await createServer({
     root: packageRoot,
     server: {
-      port: 4321,
+      port,
       open: true,
     },
     plugins: [
