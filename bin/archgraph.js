@@ -53,7 +53,7 @@ if (command === "serve") {
     root: packageRoot,
     server: {
       port,
-      open: true,
+      open: customModel ? "/view" : true,
     },
     plugins: [
       {

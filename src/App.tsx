@@ -7,6 +7,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<ProjectList />} />
+        <Route path="/view" element={<ProjectViewer />} />
         <Route path="/:projectId" element={<ProjectViewer />} />
       </Routes>
     </BrowserRouter>
