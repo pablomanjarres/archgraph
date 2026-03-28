@@ -56,10 +56,12 @@ export async function layoutGraph(
     layoutOptions: {
       "elk.algorithm": "layered",
       "elk.direction": "RIGHT",
-      "elk.spacing.nodeNode": "80",
-      "elk.layered.spacing.nodeNodeBetweenLayers": "100",
+      "elk.spacing.nodeNode": "60",
+      "elk.layered.spacing.nodeNodeBetweenLayers": "80",
       "elk.padding": `[top=${GROUP_PADDING},left=${GROUP_PADDING},bottom=${GROUP_PADDING},right=${GROUP_PADDING}]`,
       "elk.hierarchyHandling": "INCLUDE_CHILDREN",
+      "elk.separateConnectedComponents": "true",
+      "elk.aspectRatio": "2.5",
     },
     children: topLevel,
     edges: edges.map((edge) => ({
