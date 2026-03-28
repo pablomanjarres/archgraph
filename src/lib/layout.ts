@@ -14,6 +14,8 @@ export async function layoutGraph(
   const parentIds = new Set(
     nodes.filter((n) => n.data.isGroup).map((n) => n.id),
   );
+  const hasGroups = parentIds.size > 0;
+  const nodeCount = nodes.filter((n) => !n.data.isGroup).length;
 
   // Build flat list first
   const elkChildren = nodes.map((node) => {
@@ -51,18 +53,35 @@ export async function layoutGraph(
     }
   }
 
+  // Pick algorithm based on graph characteristics:
+  // - Large flat graphs (>80 nodes, no groups): use stress for compact 2D spread
+  // - Hierarchical / smaller graphs: use layered for clean directional flow
+  const useStress = nodeCount > 80 && !hasGroups;
+
+  const layoutOptions: Record<string, string> = useStress
+    ? {
+        "elk.algorithm": "stress",
+        "elk.stress.desiredEdgeLength": "200",
+        "elk.spacing.nodeNode": "50",
+        "elk.separateConnectedComponents": "true",
+        "elk.aspectRatio": "1.8",
+      }
+    : {
+        "elk.algorithm": "layered",
+        "elk.direction": "RIGHT",
+        "elk.spacing.nodeNode": "60",
+        "elk.layered.spacing.nodeNodeBetweenLayers": "80",
+        "elk.hierarchyHandling": "INCLUDE_CHILDREN",
+        "elk.separateConnectedComponents": "true",
+        "elk.aspectRatio": "2.5",
+      };
+
+  layoutOptions["elk.padding"] =
+    `[top=${GROUP_PADDING},left=${GROUP_PADDING},bottom=${GROUP_PADDING},right=${GROUP_PADDING}]`;
+
   const elkGraph = {
     id: "root",
-    layoutOptions: {
-      "elk.algorithm": "layered",
-      "elk.direction": "RIGHT",
-      "elk.spacing.nodeNode": "60",
-      "elk.layered.spacing.nodeNodeBetweenLayers": "80",
-      "elk.padding": `[top=${GROUP_PADDING},left=${GROUP_PADDING},bottom=${GROUP_PADDING},right=${GROUP_PADDING}]`,
-      "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-      "elk.separateConnectedComponents": "true",
-      "elk.aspectRatio": "2.5",
-    },
+    layoutOptions,
     children: topLevel,
     edges: edges.map((edge) => ({
       id: edge.id,
