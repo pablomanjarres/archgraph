@@ -13,13 +13,31 @@ const args = process.argv.slice(2);
 const command = args[0] ?? "serve";
 
 if (command === "serve") {
-  const modelDir = resolve(args[1] ?? process.cwd());
-  const modelPath = join(modelDir, ".archgraph", "model.json");
+  // Parse --model flag for custom model path
+  let customModel = null;
+  let positionalDir = null;
+  for (let i = 1; i < args.length; i++) {
+    if (args[i] === "--model" && i + 1 < args.length) {
+      customModel = args[++i];
+    } else if (args[i].startsWith("--model=")) {
+      customModel = args[i].slice("--model=".length);
+    } else if (!args[i].startsWith("--")) {
+      positionalDir = args[i];
+    }
+  }
+
+  const modelDir = resolve(positionalDir ?? process.cwd());
+  const modelPath = customModel
+    ? resolve(modelDir, customModel)
+    : join(modelDir, ".archgraph", "model.json");
 
   if (!fs.existsSync(modelPath)) {
     console.error(`No model found at ${modelPath}`);
     console.error(
       'Run the /graph skill in Claude Code to generate one, or create .archgraph/model.json manually.',
+    );
+    console.error(
+      'For nella graphs: archgraph serve --model .nella/graph/model.json',
     );
     process.exit(1);
   }
