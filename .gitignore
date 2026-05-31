@@ -4,3 +4,6 @@ dist
 *.local
 tsconfig.tsbuildinfo
 .DS_Store
+
+# nella index cache (tooling artifact)
+.nella/
