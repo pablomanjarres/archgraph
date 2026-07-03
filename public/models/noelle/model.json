@@ -1,0 +1,1165 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "projectName": "noelle",
+    "generatedAt": "2026-07-03T00:00:00.000Z",
+    "generatedBy": "claude-code",
+    "codebaseRoot": "/Users/pablo/Projects/noelle"
+  },
+  "objects": [
+    {
+      "id": "actor-operator",
+      "name": "Operator (Pablo)",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "The human operator who reviews the approvals inbox, edits and sends AI-drafted replies, hires agents, and sets per-agent budgets.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "actor-alpha-user",
+      "name": "Alpha Invitee",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "An allowlisted alpha-cohort user who signs in through the invite gate, joins the waitlist, and sees private-alpha placeholders for agents not yet provisioned.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "system-noelle",
+      "name": "Noelle",
+      "type": "system",
+      "scope": "internal",
+      "status": "live",
+      "description": "AI agent org-chart product where small teams hire AI growth-intern agents that discover, classify, draft, and queue social replies for human approval.",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "app-www",
+      "name": "Marketing Site",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "The trynoelle.com marketing site and waitlist capture, built with Astro and deployed to Vercel.",
+      "parentId": "system-noelle",
+      "technologies": [
+        {
+          "id": "tech-astro",
+          "name": "Astro"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/www/src/",
+          "apps/www/middleware.ts"
+        ]
+      }
+    },
+    {
+      "id": "app-dashboard",
+      "name": "Dashboard",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "The app.trynoelle.com Next.js 15 dashboard: org-chart view, approvals inbox, cost view, and the cross-platform content workspace, deployed to Vercel.",
+      "parentId": "system-noelle",
+      "technologies": [
+        {
+          "id": "tech-nextjs",
+          "name": "Next.js"
+        },
+        {
+          "id": "tech-react",
+          "name": "React"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/app/src/app/",
+          "apps/app/src/lib/queries.ts"
+        ]
+      }
+    },
+    {
+      "id": "app-api-vm",
+      "name": "API Service",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "The api.trynoelle.com Hono service on noelle-vm-0 that verifies JWT/HMAC and performs shape-validated inbound writes of drafts, approvals, and the synchronous X send path.",
+      "parentId": "system-noelle",
+      "technologies": [
+        {
+          "id": "tech-hono",
+          "name": "Hono"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/api-vm/src/app.ts",
+          "apps/api-vm/src/routes/"
+        ]
+      }
+    },
+    {
+      "id": "app-x-intern",
+      "name": "X Growth Intern (Vega)",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "The flagship worker pool (discovery, classifier, drafter, profiler, ideation, send) that finds X leads, grades them, and drafts replies for human approval.",
+      "parentId": "system-noelle",
+      "technologies": [
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/x-intern/src/workers/"
+        ]
+      }
+    },
+    {
+      "id": "app-linkedin-intern",
+      "name": "LinkedIn Growth Intern (Lyra)",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "A draft-only sibling worker that watches LinkedIn connections, profiles them, and drafts replies plus DMs for human approval; runs on the residential Lima VM and never posts.",
+      "parentId": "system-noelle",
+      "technologies": [
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/linkedin-intern/src/workers/"
+        ]
+      }
+    },
+    {
+      "id": "app-reddit-intern",
+      "name": "Reddit Growth Intern (Orion)",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "A draft-only sibling worker that watches a subreddit watchlist and drafts on-brand replies to in-ICP threads for human approval; never posts to Reddit.",
+      "parentId": "system-noelle",
+      "technologies": [
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/reddit-intern/src/workers/"
+        ]
+      }
+    },
+    {
+      "id": "app-video-intern",
+      "name": "Video Intern (Nova)",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "A draft-only worker that harvests Instagram and TikTok short-form reels, tears them down, and drafts video ideas and scripts in the operator's voice.",
+      "parentId": "system-noelle",
+      "technologies": [
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/video-intern/src/workers/"
+        ]
+      }
+    },
+    {
+      "id": "app-cli",
+      "name": "Noelle CLI",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "The noelle CLI that provisions and operates a fully self-hosted Noelle on a personal VM with local Postgres, single-operator auth, and the dashboard, API, and workers.",
+      "parentId": "system-noelle",
+      "technologies": [
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/cli/src/"
+        ]
+      }
+    },
+    {
+      "id": "component-runtime",
+      "name": "Runtime Core",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Shared library (@noelle/runtime) with model routing (callAgentModel), budget-bucket caps, the tenancy gate (assertOrgMember), knowledge-base retrieval, and the Nella client used by every agent.",
+      "parentId": "system-noelle",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "packages/runtime/src/callAgentModel.ts",
+          "packages/runtime/src/tenancy.ts",
+          "packages/runtime/src/budgetBucket.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-cloudsql",
+      "name": "Cloud SQL (noelle-db)",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "GCP Cloud SQL Postgres 16 (noelle-agents:us-east1:noelle-db) holding the noelle.* data plane: leads, drafts, approvals, llm_calls, org_spend_month, and worker_runs.",
+      "technologies": [
+        {
+          "id": "tech-postgres",
+          "name": "PostgreSQL"
+        },
+        {
+          "id": "tech-gcp",
+          "name": "Google Cloud"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "infra/cloudsql/"
+        ]
+      }
+    },
+    {
+      "id": "store-gcs",
+      "name": "Google Cloud Storage",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "GCS buckets for per-tenant Mars vault files (noelle-vaults) and content media referenced by the drafter and content workspace.",
+      "technologies": [
+        {
+          "id": "tech-gcp",
+          "name": "Google Cloud"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "packages/runtime/src/vaultStorage.ts",
+          "packages/runtime/src/gcsAnchorSource.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-secret-manager",
+      "name": "GCP Secret Manager",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "GCP Secret Manager (project noelle-agents) holds every Noelle secret; Vercel and the VM services pull and TTL-cache them at runtime instead of using .env files.",
+      "technologies": [
+        {
+          "id": "tech-gcp",
+          "name": "Google Cloud"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "packages/secrets/src/"
+        ]
+      }
+    },
+    {
+      "id": "store-local-postgres",
+      "name": "Local Postgres (self-host)",
+      "type": "store",
+      "scope": "internal",
+      "status": "live",
+      "description": "The local Postgres database the noelle CLI provisions inside a personal Lima VM for the fully self-hosted, single-operator deployment mode.",
+      "technologies": [
+        {
+          "id": "tech-postgres",
+          "name": "PostgreSQL"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/cli/src/"
+        ]
+      }
+    },
+    {
+      "id": "system-supabase-auth",
+      "name": "Supabase Auth",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Supabase project hoyxsfupnjyonwqdjvra used for auth only (magic link, Google, GitHub OAuth), issuing the JWT that every Noelle entrypoint verifies via JWKS.",
+      "technologies": [
+        {
+          "id": "tech-supabase",
+          "name": "Supabase"
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "system-codex",
+      "name": "Codex / OpenAI (gpt-5)",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "The primary agent LLM path (Codex CLI running gpt-5 over a ChatGPT OAuth session) invoked by the drafter for reply and script generation.",
+      "technologies": [
+        {
+          "id": "tech-openai",
+          "name": "OpenAI"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "packages/runtime/src/openaiBackend.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-vertex",
+      "name": "Vertex AI (Claude + Gemini)",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Google Vertex AI providing the fallback drafting model (Claude Sonnet) and the Gemini Flash classifier that grades leads when Codex is unavailable.",
+      "technologies": [
+        {
+          "id": "tech-gcp",
+          "name": "Google Cloud"
+        },
+        {
+          "id": "tech-anthropic",
+          "name": "Anthropic Claude"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "packages/runtime/src/vertexBackend.ts",
+          "packages/runtime/src/bedrockBackend.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-voyage",
+      "name": "Voyage AI",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Voyage AI embedding and rerank API powering the knowledge-base dense-retrieval lane and the account-feeder style corpus.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "packages/runtime/src/voyageEmbed.ts",
+          "packages/runtime/src/voyageRerank.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-nella",
+      "name": "Nella",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "The operator's Nella deployment (nella.getnella.dev, workspace mars-pablo) that the drafter queries per-draft for voice anchors from the indexed Mars vault.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "packages/runtime/src/nellaClient.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-apify",
+      "name": "Apify",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Read-only Apify scraper platform (apidojo for X, HarvestAPI for LinkedIn, parseforge for Reddit, instagram-scraper for video) used by every intern's discovery and profiler with no first-party login.",
+      "technologies": [
+        {
+          "id": "tech-apify",
+          "name": "Apify"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "packages/x-apify/",
+          "packages/linkedin-apify/",
+          "packages/reddit-apify/",
+          "packages/video-apify/"
+        ]
+      }
+    },
+    {
+      "id": "system-x-api",
+      "name": "X / Twitter API",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "The authenticated X write path via @steipete/bird cookies, used only in the send pipeline to post approved replies and likes.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "packages/x-client/src/"
+        ]
+      }
+    },
+    {
+      "id": "system-pushover",
+      "name": "Pushover",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Push-notification service that alerts the operator with a deeplink to the approvals inbox when a new draft is queued.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "packages/runtime/src/pushoverClient.ts"
+        ]
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn-operator-dashboard",
+      "sourceId": "actor-operator",
+      "targetId": "app-dashboard",
+      "label": "reviews approvals, hires agents, edits and sends drafts",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-operator-cli",
+      "sourceId": "actor-operator",
+      "targetId": "app-cli",
+      "label": "self-hosts and operates Noelle on a personal VM",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-alpha-www",
+      "sourceId": "actor-alpha-user",
+      "targetId": "app-www",
+      "label": "joins the waitlist from the marketing site",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-alpha-dashboard",
+      "sourceId": "actor-alpha-user",
+      "targetId": "app-dashboard",
+      "label": "signs in through the invite gate, sees private-alpha placeholders",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-dashboard-supabase",
+      "sourceId": "app-dashboard",
+      "targetId": "system-supabase-auth",
+      "label": "authenticates users and verifies the Supabase JWT via JWKS",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-dashboard-apivm",
+      "sourceId": "app-dashboard",
+      "targetId": "app-api-vm",
+      "label": "forwards the user JWT to send drafts and read agent state",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-dashboard-runtime",
+      "sourceId": "app-dashboard",
+      "targetId": "component-runtime",
+      "label": "uses the tenancy gate, model routing, and query helpers",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-apivm-runtime",
+      "sourceId": "app-api-vm",
+      "targetId": "component-runtime",
+      "label": "uses tenancy, spend recording, and the X client",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-xintern-runtime",
+      "sourceId": "app-x-intern",
+      "targetId": "component-runtime",
+      "label": "routes every LLM call through callAgentModel with budget caps",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-linkedin-runtime",
+      "sourceId": "app-linkedin-intern",
+      "targetId": "component-runtime",
+      "label": "routes profiling and drafting through callAgentModel",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-reddit-runtime",
+      "sourceId": "app-reddit-intern",
+      "targetId": "component-runtime",
+      "label": "routes classification and drafting through callAgentModel",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-video-runtime",
+      "sourceId": "app-video-intern",
+      "targetId": "component-runtime",
+      "label": "routes idea and script generation through callAgentModel",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-xintern-apivm",
+      "sourceId": "app-x-intern",
+      "targetId": "app-api-vm",
+      "label": "POSTs drafter outputs (HMAC-signed) to /api/outbound",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-runtime-cloudsql",
+      "sourceId": "component-runtime",
+      "targetId": "store-cloudsql",
+      "label": "reads/writes noelle.* as the noelle_app role",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-dashboard-cloudsql",
+      "sourceId": "app-dashboard",
+      "targetId": "store-cloudsql",
+      "label": "reads org chart, approvals, and spend over public IP + SSL",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-apivm-cloudsql",
+      "sourceId": "app-api-vm",
+      "targetId": "store-cloudsql",
+      "label": "inserts drafts and approvals, updates send state",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-xintern-cloudsql",
+      "sourceId": "app-x-intern",
+      "targetId": "store-cloudsql",
+      "label": "inserts leads, claims batches, writes drafts",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-cli-localpg",
+      "sourceId": "app-cli",
+      "targetId": "store-local-postgres",
+      "label": "provisions and migrates the local schema for self-hosted mode",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-runtime-gcs",
+      "sourceId": "component-runtime",
+      "targetId": "store-gcs",
+      "label": "reads per-tenant vault files and content media",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-runtime-codex",
+      "sourceId": "component-runtime",
+      "targetId": "system-codex",
+      "label": "drafts replies and scripts via Codex gpt-5 (primary)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-runtime-vertex",
+      "sourceId": "component-runtime",
+      "targetId": "system-vertex",
+      "label": "falls back to Claude Sonnet and runs the Gemini classifier",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-runtime-nella",
+      "sourceId": "component-runtime",
+      "targetId": "system-nella",
+      "label": "fetches voice anchors from the mars-pablo workspace",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-xintern-apify",
+      "sourceId": "app-x-intern",
+      "targetId": "system-apify",
+      "label": "discovers and profiles X leads via read-only scraper",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-linkedin-apify",
+      "sourceId": "app-linkedin-intern",
+      "targetId": "system-apify",
+      "label": "fetches watchlisted connection posts and profiles",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-reddit-apify",
+      "sourceId": "app-reddit-intern",
+      "targetId": "system-apify",
+      "label": "fetches posts from the subreddit watchlist",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-video-apify",
+      "sourceId": "app-video-intern",
+      "targetId": "system-apify",
+      "label": "harvests Instagram/TikTok reels and account snapshots",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-apivm-xapi",
+      "sourceId": "app-api-vm",
+      "targetId": "system-x-api",
+      "label": "posts approved replies and likes via bird cookies",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-operator-noelle",
+      "sourceId": "actor-operator",
+      "targetId": "system-noelle",
+      "label": "reviews and approves AI-drafted replies, hires agents",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-alpha-noelle",
+      "sourceId": "actor-alpha-user",
+      "targetId": "system-noelle",
+      "label": "joins the waitlist and holds a gated alpha seat",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-noelle-supabase",
+      "sourceId": "system-noelle",
+      "targetId": "system-supabase-auth",
+      "label": "authenticates users; verifies issued JWTs",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-noelle-cloudsql",
+      "sourceId": "system-noelle",
+      "targetId": "store-cloudsql",
+      "label": "persists the noelle.* data plane",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-noelle-secrets",
+      "sourceId": "system-noelle",
+      "targetId": "store-secret-manager",
+      "label": "pulls all secrets at runtime",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-noelle-codex",
+      "sourceId": "system-noelle",
+      "targetId": "system-codex",
+      "label": "drafts replies and scripts via gpt-5 (primary)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-noelle-vertex",
+      "sourceId": "system-noelle",
+      "targetId": "system-vertex",
+      "label": "fallback Claude drafting and Gemini classification",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-noelle-voyage",
+      "sourceId": "system-noelle",
+      "targetId": "system-voyage",
+      "label": "embeddings and rerank for knowledge retrieval",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-noelle-nella",
+      "sourceId": "system-noelle",
+      "targetId": "system-nella",
+      "label": "voice anchors from the Mars vault",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-noelle-apify",
+      "sourceId": "system-noelle",
+      "targetId": "system-apify",
+      "label": "read-only social discovery across platforms",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-noelle-xapi",
+      "sourceId": "system-noelle",
+      "targetId": "system-x-api",
+      "label": "posts approved X replies in the send path",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-noelle-pushover",
+      "sourceId": "system-noelle",
+      "targetId": "system-pushover",
+      "label": "push notifications to the operator",
+      "status": "live",
+      "type": "async"
+    }
+  ],
+  "groups": [
+    {
+      "id": "group-surfaces",
+      "name": "Web Surfaces",
+      "objectIds": [
+        "app-www",
+        "app-dashboard",
+        "app-cli"
+      ]
+    },
+    {
+      "id": "group-agents",
+      "name": "Agent Workers",
+      "objectIds": [
+        "app-x-intern",
+        "app-linkedin-intern",
+        "app-reddit-intern",
+        "app-video-intern"
+      ]
+    },
+    {
+      "id": "group-services",
+      "name": "Backend Services",
+      "objectIds": [
+        "app-api-vm",
+        "component-runtime"
+      ]
+    },
+    {
+      "id": "group-data",
+      "name": "Data Stores",
+      "objectIds": [
+        "store-cloudsql",
+        "store-gcs",
+        "store-secret-manager",
+        "store-local-postgres"
+      ]
+    },
+    {
+      "id": "group-ai",
+      "name": "LLM & Retrieval",
+      "objectIds": [
+        "system-codex",
+        "system-vertex",
+        "system-voyage",
+        "system-nella"
+      ]
+    },
+    {
+      "id": "group-external",
+      "name": "External Platforms",
+      "objectIds": [
+        "system-supabase-auth",
+        "system-apify",
+        "system-x-api",
+        "system-pushover"
+      ]
+    }
+  ],
+  "technologies": [
+    {
+      "id": "tech-typescript",
+      "name": "TypeScript",
+      "color": "#3178c6",
+      "category": "language"
+    },
+    {
+      "id": "tech-nodejs",
+      "name": "Node.js",
+      "color": "#339933",
+      "category": "tool"
+    },
+    {
+      "id": "tech-nextjs",
+      "name": "Next.js",
+      "color": "#000000",
+      "category": "framework"
+    },
+    {
+      "id": "tech-astro",
+      "name": "Astro",
+      "color": "#ff5d01",
+      "category": "framework"
+    },
+    {
+      "id": "tech-hono",
+      "name": "Hono",
+      "color": "#e36002",
+      "category": "framework"
+    },
+    {
+      "id": "tech-react",
+      "name": "React",
+      "color": "#61dafb",
+      "category": "framework"
+    },
+    {
+      "id": "tech-postgres",
+      "name": "PostgreSQL",
+      "color": "#336791",
+      "category": "database"
+    },
+    {
+      "id": "tech-gcp",
+      "name": "Google Cloud",
+      "color": "#4285f4",
+      "category": "service"
+    },
+    {
+      "id": "tech-supabase",
+      "name": "Supabase",
+      "color": "#3ecf8e",
+      "category": "service"
+    },
+    {
+      "id": "tech-apify",
+      "name": "Apify",
+      "color": "#ff9012",
+      "category": "service"
+    },
+    {
+      "id": "tech-openai",
+      "name": "OpenAI",
+      "color": "#10a37f",
+      "category": "service"
+    },
+    {
+      "id": "tech-anthropic",
+      "name": "Anthropic Claude",
+      "color": "#d97757",
+      "category": "service"
+    }
+  ],
+  "tags": [],
+  "diagrams": [
+    {
+      "id": "diagram-context",
+      "name": "System Context",
+      "level": 1,
+      "objectIds": [
+        "actor-operator",
+        "actor-alpha-user",
+        "system-noelle",
+        "store-cloudsql",
+        "store-secret-manager",
+        "system-supabase-auth",
+        "system-codex",
+        "system-vertex",
+        "system-voyage",
+        "system-nella",
+        "system-apify",
+        "system-x-api",
+        "system-pushover"
+      ],
+      "connectionIds": [
+        "conn-l1-operator-noelle",
+        "conn-l1-alpha-noelle",
+        "conn-l1-noelle-supabase",
+        "conn-l1-noelle-cloudsql",
+        "conn-l1-noelle-secrets",
+        "conn-l1-noelle-codex",
+        "conn-l1-noelle-vertex",
+        "conn-l1-noelle-voyage",
+        "conn-l1-noelle-nella",
+        "conn-l1-noelle-apify",
+        "conn-l1-noelle-xapi",
+        "conn-l1-noelle-pushover"
+      ],
+      "positions": {}
+    },
+    {
+      "id": "diagram-container",
+      "name": "Container",
+      "level": 2,
+      "objectIds": [
+        "actor-operator",
+        "actor-alpha-user",
+        "app-www",
+        "app-dashboard",
+        "app-api-vm",
+        "app-x-intern",
+        "app-linkedin-intern",
+        "app-reddit-intern",
+        "app-video-intern",
+        "app-cli",
+        "component-runtime",
+        "store-cloudsql",
+        "store-gcs",
+        "store-local-postgres",
+        "system-supabase-auth",
+        "system-codex",
+        "system-vertex",
+        "system-nella",
+        "system-apify",
+        "system-x-api"
+      ],
+      "connectionIds": [
+        "conn-operator-dashboard",
+        "conn-operator-cli",
+        "conn-alpha-www",
+        "conn-alpha-dashboard",
+        "conn-dashboard-supabase",
+        "conn-dashboard-apivm",
+        "conn-dashboard-runtime",
+        "conn-apivm-runtime",
+        "conn-xintern-runtime",
+        "conn-linkedin-runtime",
+        "conn-reddit-runtime",
+        "conn-video-runtime",
+        "conn-xintern-apivm",
+        "conn-runtime-cloudsql",
+        "conn-dashboard-cloudsql",
+        "conn-apivm-cloudsql",
+        "conn-xintern-cloudsql",
+        "conn-cli-localpg",
+        "conn-runtime-gcs",
+        "conn-runtime-codex",
+        "conn-runtime-vertex",
+        "conn-runtime-nella",
+        "conn-xintern-apify",
+        "conn-linkedin-apify",
+        "conn-reddit-apify",
+        "conn-video-apify",
+        "conn-apivm-xapi"
+      ],
+      "positions": {}
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow-lead-to-draft",
+      "name": "Lead becomes an approvable draft",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-xintern-apify",
+          "description": "X intern discovery polls Apify for tweets from watchlisted handles"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-xintern-cloudsql",
+          "description": "Discovery upserts net-new rows into noelle.leads"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-xintern-runtime",
+          "description": "The drafter routes the lead through callAgentModel with budget caps"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-runtime-nella",
+          "description": "Runtime fetches voice anchors from the mars-pablo workspace"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-runtime-codex",
+          "description": "Codex gpt-5 generates candidate replies (empathetic, technical, contrarian)"
+        },
+        {
+          "order": 6,
+          "connectionId": "conn-xintern-apivm",
+          "description": "The drafter POSTs the drafts (HMAC-signed) to /api/outbound"
+        },
+        {
+          "order": 7,
+          "connectionId": "conn-apivm-cloudsql",
+          "description": "The API inserts noelle.drafts and a pending noelle.approvals row"
+        }
+      ]
+    },
+    {
+      "id": "flow-approve-send",
+      "name": "Operator approves and sends a draft",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-operator-dashboard",
+          "description": "Operator clicks Send on a pending draft in the approvals inbox"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-dashboard-supabase",
+          "description": "Dashboard middleware verifies the Supabase JWT via JWKS and extracts sub"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-dashboard-apivm",
+          "description": "Dashboard forwards the request (Bearer JWT) to the API send route"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-apivm-cloudsql",
+          "description": "API marks the draft, lead, and approval as sent after assertOrgMember"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-apivm-xapi",
+          "description": "API posts the approved reply to X via bird cookies"
+        }
+      ]
+    },
+    {
+      "id": "flow-sibling-draft",
+      "name": "Draft-only sibling intern proposes engagement",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-linkedin-apify",
+          "description": "Lyra's discovery fetches new posts from watchlisted LinkedIn connections via Apify"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-linkedin-runtime",
+          "description": "The classifier and drafter route through callAgentModel"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-runtime-vertex",
+          "description": "Gemini Flash grades the lead as in-ICP; Claude Sonnet is the drafting fallback"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-runtime-cloudsql",
+          "description": "The draft-only reply/DM is persisted to noelle.* for human approval"
+        }
+      ]
+    },
+    {
+      "id": "flow-spend-cap",
+      "name": "Spend is metered and capped",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-xintern-runtime",
+          "description": "Every agent LLM call goes through callAgentModel, which runs the budget pre-check"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-runtime-codex",
+          "description": "Under cap the call proceeds to Codex; otherwise BudgetExceededError is thrown"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-runtime-cloudsql",
+          "description": "callAgentModel records the call cost into noelle.llm_calls"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-dashboard-cloudsql",
+          "description": "The dashboard reads the aggregated noelle.org_spend_month for the cost view"
+        }
+      ]
+    }
+  ]
+}

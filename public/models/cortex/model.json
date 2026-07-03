@@ -1,0 +1,1125 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "projectName": "cortex",
+    "generatedAt": "2026-07-03T00:00:00.000Z",
+    "generatedBy": "claude-code",
+    "codebaseRoot": "/Users/pablo/Projects/cortex"
+  },
+  "objects": [
+    {
+      "id": "actor-operator",
+      "name": "Founder Operator",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Pablo, the solo founder/student who audits his habits, sprints, finances, GTM state, and founder metrics from the desktop app and, over Tailscale, his phone.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "actor-claude",
+      "name": "Claude",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "AI agent that reads and writes every Cortex data domain through the 51-tool MCP server (habits, journal, CRM, calendar, GTM, opportunities).",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "system-cortex",
+      "name": "Cortex",
+      "type": "system",
+      "scope": "internal",
+      "status": "live",
+      "description": "Private, encrypted macOS desktop dashboard that unifies a founder's habits, sprints, reading, CRM, calendar, coursework, finances, GTM state, and live founder metrics.",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-electron",
+          "name": "Electron"
+        },
+        {
+          "id": "tech-react",
+          "name": "React"
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "app-renderer",
+      "name": "Dashboard Renderer",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "React 19 + Vite renderer with ~20 feature modules (daily, habits, founder, crm, gym, opportunities, finance) served both in Electron and as a Tailscale PWA.",
+      "parentId": "system-cortex",
+      "technologies": [
+        {
+          "id": "tech-react",
+          "name": "React"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-vite",
+          "name": "Vite"
+        },
+        {
+          "id": "tech-tailwind",
+          "name": "Tailwind CSS"
+        },
+        {
+          "id": "tech-zustand",
+          "name": "Zustand"
+        },
+        {
+          "id": "tech-recharts",
+          "name": "Recharts"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/App.tsx",
+          "src/features/",
+          "src/lib/store.ts"
+        ]
+      }
+    },
+    {
+      "id": "app-main",
+      "name": "Electron Main Process",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Owns the window, tray, context-isolated IPC, the encrypted data directory, and the :3456 web server for the desktop app.",
+      "parentId": "system-cortex",
+      "technologies": [
+        {
+          "id": "tech-electron",
+          "name": "Electron"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-swift",
+          "name": "Swift"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "electron/main.ts",
+          "electron/preload.ts",
+          "electron/keychain.ts"
+        ]
+      }
+    },
+    {
+      "id": "app-mcp-server",
+      "name": "MCP Server",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "51-tool Model Context Protocol server (18 groups) that proxies the app's localhost:3456 API to Claude over stdio or an optional --http transport.",
+      "parentId": "system-cortex",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-mcp",
+          "name": "MCP SDK"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "mcp-server/src/index.ts"
+        ]
+      }
+    },
+    {
+      "id": "app-radar",
+      "name": "Opportunity Radar",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "launchd-scheduled pipeline that scrapes opportunity feeds and fastest-growing repos, classifies them with a tool-less Claude call, and ingests survivors into the Cortex store.",
+      "parentId": "system-cortex",
+      "technologies": [
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-launchd",
+          "name": "launchd"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "scripts/opportunity-radar-weekly.sh",
+          "scripts/growth-fetch.mjs",
+          "scripts/radar-ingest.mjs"
+        ]
+      }
+    },
+    {
+      "id": "component-web-api",
+      "name": "Web API (:3456)",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "HTTP server embedded in the main process exposing /api/data plus calendar, integrations, mars-vault, and system routes, IP-gated to localhost and the Tailscale CGNAT range.",
+      "parentId": "app-main",
+      "technologies": [
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "electron/main.ts"
+        ]
+      }
+    },
+    {
+      "id": "component-integrations",
+      "name": "Integrations Layer",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Main-process fetchers for GitHub, Lemon Squeezy, Vercel, Supabase stats, the Mars Obsidian vault, Paperclip, and Apple Calendar.",
+      "parentId": "app-main",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "electron/integrations/",
+          "electron/calendar.ts"
+        ]
+      }
+    },
+    {
+      "id": "component-crypto",
+      "name": "Encryption Layer",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Seals every data file with AES-256-GCM in a custom binary container using a 32-byte master key held behind Electron safeStorage.",
+      "parentId": "app-main",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "electron/crypto.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-encrypted-files",
+      "name": "Encrypted Data Files",
+      "type": "store",
+      "scope": "internal",
+      "status": "live",
+      "description": "Per-key JSON documents persisted to the userData directory, encrypted at rest with AES-256-GCM.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "electron/crypto.ts",
+          "electron/main.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-keychain",
+      "name": "macOS Keychain",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "Keychain-backed Electron safeStorage holding the 32-byte master key and all integration API tokens.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "electron/keychain.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-localstorage",
+      "name": "Browser localStorage",
+      "type": "store",
+      "scope": "internal",
+      "status": "live",
+      "description": "Third-tier persistence fallback used in web/dev mode when neither IPC nor the HTTP API is reachable.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "src/lib/store.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-supabase",
+      "name": "Supabase",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "RLS-gated Supabase Postgres holding product user signups and the realtime spend ledger, read via the anon-key client and a server-side stats key.",
+      "technologies": [
+        {
+          "id": "tech-supabase",
+          "name": "Supabase"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/lib/supabase.ts",
+          "electron/integrations/supabase.ts",
+          "src/lib/use-realtime-spend.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-mars-vault",
+      "name": "Mars Obsidian Vault",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "Local Obsidian markdown vault (~/Projects/Mars) whose journal entries and voice anchors the app reads and appends.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "electron/integrations/mars.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-github",
+      "name": "GitHub API",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Source of founder commit/PR/streak metrics and the repository search that powers the fastest-growing-projects scan.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "electron/integrations/github.ts",
+          "scripts/growth-fetch.mjs"
+        ]
+      }
+    },
+    {
+      "id": "system-lemon",
+      "name": "Lemon Squeezy API",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Billing API queried for MRR, active subscriptions, customers, and monthly revenue.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "electron/integrations/lemon.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-vercel",
+      "name": "Vercel API",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Queried for deployment counts, latest deployment state, and web analytics pageviews/visitors.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "electron/integrations/vercel.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-apple-calendar",
+      "name": "Apple Calendar (EventKit)",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "macOS EventKit calendars read and mutated through a Swift bridge for today's events, birthdays, and event CRUD.",
+      "technologies": [
+        {
+          "id": "tech-swift",
+          "name": "Swift"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "electron/calendar.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-paperclip",
+      "name": "Paperclip API",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Remote agent-orchestration service polled over Tailscale for companies, agents, heartbeat runs, and live activity.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "electron/integrations/paperclip.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-lima-vm",
+      "name": "Lima VM (noelle)",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Remote Lima VM reached over Tailscale that runs noelle's read-only Apify opportunity scrapers and exposes Glances/Uptime system telemetry.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "scripts/opportunity-radar-weekly.sh",
+          "electron/main.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-claude-cli",
+      "name": "Claude CLI",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Local `claude -p` invocation run with no allowed tools to classify and score scraped opportunities, injection-safe by construction.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "scripts/opportunity-radar-weekly.sh",
+          "scripts/radar-build-prompt.mjs"
+        ]
+      }
+    },
+    {
+      "id": "system-launchd",
+      "name": "launchd",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "macOS scheduler that fires the weekly opportunity-radar and fastest-growing-projects jobs via LaunchAgents.",
+      "technologies": [
+        {
+          "id": "tech-launchd",
+          "name": "launchd"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "scripts/com.pablo.growth-radar.plist",
+          "scripts/com.pablo.opportunity-radar.plist"
+        ]
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn-operator-renderer",
+      "sourceId": "actor-operator",
+      "targetId": "app-renderer",
+      "label": "uses the desktop dashboard",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-operator-webapi",
+      "sourceId": "actor-operator",
+      "targetId": "component-web-api",
+      "label": "views dashboard from phone over Tailscale (PWA)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-claude-mcp",
+      "sourceId": "actor-claude",
+      "targetId": "app-mcp-server",
+      "label": "calls 51 MCP tools to read/write all data",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-renderer-main",
+      "sourceId": "app-renderer",
+      "targetId": "app-main",
+      "label": "reads/writes data over context-isolated IPC (tier 1)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-renderer-webapi",
+      "sourceId": "app-renderer",
+      "targetId": "component-web-api",
+      "label": "calls /api/data over HTTP when not in Electron (tier 2)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-renderer-localstorage",
+      "sourceId": "app-renderer",
+      "targetId": "store-localstorage",
+      "label": "falls back to localStorage (tier 3)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-renderer-supabase",
+      "sourceId": "app-renderer",
+      "targetId": "store-supabase",
+      "label": "subscribes to the realtime spend ledger (anon key, RLS)",
+      "status": "live",
+      "type": "event"
+    },
+    {
+      "id": "conn-main-crypto",
+      "sourceId": "app-main",
+      "targetId": "component-crypto",
+      "label": "routes IPC data reads/writes through encryption",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-webapi-crypto",
+      "sourceId": "component-web-api",
+      "targetId": "component-crypto",
+      "label": "routes /api/data reads/writes through encryption",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-crypto-files",
+      "sourceId": "component-crypto",
+      "targetId": "store-encrypted-files",
+      "label": "seals/opens AES-256-GCM JSON files",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-crypto-keychain",
+      "sourceId": "component-crypto",
+      "targetId": "store-keychain",
+      "label": "loads 32-byte master key via safeStorage",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-main-integrations",
+      "sourceId": "app-main",
+      "targetId": "component-integrations",
+      "label": "runs founder-metrics, vault & calendar fetchers",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-integrations-github",
+      "sourceId": "component-integrations",
+      "targetId": "system-github",
+      "label": "fetches commits, PRs, repos & streak",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-integrations-lemon",
+      "sourceId": "component-integrations",
+      "targetId": "system-lemon",
+      "label": "fetches MRR & active subscriptions",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-integrations-vercel",
+      "sourceId": "component-integrations",
+      "targetId": "system-vercel",
+      "label": "fetches deployments & analytics",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-integrations-supabase",
+      "sourceId": "component-integrations",
+      "targetId": "store-supabase",
+      "label": "fetches signup stats (server-side key)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-integrations-mars",
+      "sourceId": "component-integrations",
+      "targetId": "store-mars-vault",
+      "label": "reads/appends journal & voice anchors",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-integrations-calendar",
+      "sourceId": "component-integrations",
+      "targetId": "system-apple-calendar",
+      "label": "reads/writes events via EventKit",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-integrations-paperclip",
+      "sourceId": "component-integrations",
+      "targetId": "system-paperclip",
+      "label": "polls companies, agents & heartbeats",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-webapi-limavm",
+      "sourceId": "component-web-api",
+      "targetId": "system-lima-vm",
+      "label": "proxies Glances + Uptime system telemetry",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-mcp-webapi",
+      "sourceId": "app-mcp-server",
+      "targetId": "component-web-api",
+      "label": "proxies all reads/writes to :3456 /api/*",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-launchd-radar",
+      "sourceId": "system-launchd",
+      "targetId": "app-radar",
+      "label": "fires weekly radar & growth jobs on a calendar interval",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-radar-limavm",
+      "sourceId": "app-radar",
+      "targetId": "system-lima-vm",
+      "label": "scrapes opportunity feeds via Apify (read-only)",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-radar-github",
+      "sourceId": "app-radar",
+      "targetId": "system-github",
+      "label": "searches GitHub for fastest-growing repos",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-radar-claude",
+      "sourceId": "app-radar",
+      "targetId": "system-claude-cli",
+      "label": "tool-less classify & score of raw hits",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-radar-webapi",
+      "sourceId": "app-radar",
+      "targetId": "component-web-api",
+      "label": "POSTs validated opportunities & growth projects to the store",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-operator-cortex",
+      "sourceId": "actor-operator",
+      "targetId": "system-cortex",
+      "label": "audits days via desktop + phone dashboard",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-claude-cortex",
+      "sourceId": "actor-claude",
+      "targetId": "system-cortex",
+      "label": "reads/writes all data via 51 MCP tools",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-launchd-cortex",
+      "sourceId": "system-launchd",
+      "targetId": "system-cortex",
+      "label": "triggers weekly radar & growth runs",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-cortex-supabase",
+      "sourceId": "system-cortex",
+      "targetId": "store-supabase",
+      "label": "cloud user data, realtime spend & signup stats",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-cortex-github",
+      "sourceId": "system-cortex",
+      "targetId": "system-github",
+      "label": "founder commit/PR metrics + repo search",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-cortex-lemon",
+      "sourceId": "system-cortex",
+      "targetId": "system-lemon",
+      "label": "MRR & subscriptions",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-cortex-vercel",
+      "sourceId": "system-cortex",
+      "targetId": "system-vercel",
+      "label": "deployments & web analytics",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-cortex-calendar",
+      "sourceId": "system-cortex",
+      "targetId": "system-apple-calendar",
+      "label": "calendar events via EventKit",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-cortex-mars",
+      "sourceId": "system-cortex",
+      "targetId": "store-mars-vault",
+      "label": "Obsidian journal & voice anchors",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-cortex-paperclip",
+      "sourceId": "system-cortex",
+      "targetId": "system-paperclip",
+      "label": "agent orchestration telemetry",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-cortex-limavm",
+      "sourceId": "system-cortex",
+      "targetId": "system-lima-vm",
+      "label": "opportunity feed scrapes + system telemetry",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-cortex-claude-cli",
+      "sourceId": "system-cortex",
+      "targetId": "system-claude-cli",
+      "label": "tool-less opportunity classification",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-cortex-keychain",
+      "sourceId": "system-cortex",
+      "targetId": "store-keychain",
+      "label": "master key + integration tokens (Keychain)",
+      "status": "live",
+      "type": "sync"
+    }
+  ],
+  "groups": [
+    {
+      "id": "group-desktop",
+      "name": "Electron Desktop App",
+      "objectIds": [
+        "app-renderer",
+        "app-main",
+        "component-web-api",
+        "component-integrations",
+        "component-crypto"
+      ]
+    },
+    {
+      "id": "group-agent-automation",
+      "name": "Agent & Automation",
+      "objectIds": [
+        "app-mcp-server",
+        "app-radar"
+      ]
+    },
+    {
+      "id": "group-local-stores",
+      "name": "Local & Encrypted Stores",
+      "objectIds": [
+        "store-encrypted-files",
+        "store-keychain",
+        "store-localstorage",
+        "store-mars-vault"
+      ]
+    },
+    {
+      "id": "group-founder-metrics",
+      "name": "Founder Metrics Sources",
+      "objectIds": [
+        "system-github",
+        "system-lemon",
+        "system-vercel",
+        "store-supabase"
+      ]
+    },
+    {
+      "id": "group-external-systems",
+      "name": "External Systems & Infra",
+      "objectIds": [
+        "system-apple-calendar",
+        "system-paperclip",
+        "system-lima-vm",
+        "system-claude-cli",
+        "system-launchd"
+      ]
+    }
+  ],
+  "technologies": [
+    {
+      "id": "tech-typescript",
+      "name": "TypeScript",
+      "color": "#3178c6",
+      "category": "language"
+    },
+    {
+      "id": "tech-react",
+      "name": "React",
+      "color": "#61dafb",
+      "category": "framework"
+    },
+    {
+      "id": "tech-electron",
+      "name": "Electron",
+      "color": "#47848f",
+      "category": "framework"
+    },
+    {
+      "id": "tech-vite",
+      "name": "Vite",
+      "color": "#646cff",
+      "category": "tool"
+    },
+    {
+      "id": "tech-tailwind",
+      "name": "Tailwind CSS",
+      "color": "#06b6d4",
+      "category": "framework"
+    },
+    {
+      "id": "tech-nodejs",
+      "name": "Node.js",
+      "color": "#339933",
+      "category": "language"
+    },
+    {
+      "id": "tech-mcp",
+      "name": "MCP SDK",
+      "color": "#6366f1",
+      "category": "framework"
+    },
+    {
+      "id": "tech-supabase",
+      "name": "Supabase",
+      "color": "#3ecf8e",
+      "category": "database"
+    },
+    {
+      "id": "tech-zustand",
+      "name": "Zustand",
+      "color": "#443e38",
+      "category": "framework"
+    },
+    {
+      "id": "tech-recharts",
+      "name": "Recharts",
+      "color": "#22b5bf",
+      "category": "framework"
+    },
+    {
+      "id": "tech-swift",
+      "name": "Swift",
+      "color": "#f05138",
+      "category": "language"
+    },
+    {
+      "id": "tech-launchd",
+      "name": "launchd",
+      "color": "#5b5b5f",
+      "category": "tool"
+    }
+  ],
+  "tags": [],
+  "diagrams": [
+    {
+      "id": "diagram-context",
+      "name": "System Context",
+      "level": 1,
+      "objectIds": [
+        "actor-operator",
+        "actor-claude",
+        "system-launchd",
+        "system-cortex",
+        "store-supabase",
+        "store-mars-vault",
+        "store-keychain",
+        "system-github",
+        "system-lemon",
+        "system-vercel",
+        "system-apple-calendar",
+        "system-paperclip",
+        "system-lima-vm",
+        "system-claude-cli"
+      ],
+      "connectionIds": [
+        "conn-l1-operator-cortex",
+        "conn-l1-claude-cortex",
+        "conn-l1-launchd-cortex",
+        "conn-l1-cortex-supabase",
+        "conn-l1-cortex-github",
+        "conn-l1-cortex-lemon",
+        "conn-l1-cortex-vercel",
+        "conn-l1-cortex-calendar",
+        "conn-l1-cortex-mars",
+        "conn-l1-cortex-paperclip",
+        "conn-l1-cortex-limavm",
+        "conn-l1-cortex-claude-cli",
+        "conn-l1-cortex-keychain"
+      ],
+      "positions": {}
+    },
+    {
+      "id": "diagram-container",
+      "name": "Container Diagram",
+      "level": 2,
+      "objectIds": [
+        "actor-operator",
+        "actor-claude",
+        "system-launchd",
+        "app-renderer",
+        "app-main",
+        "app-mcp-server",
+        "app-radar",
+        "component-web-api",
+        "component-integrations",
+        "component-crypto",
+        "store-encrypted-files",
+        "store-keychain",
+        "store-localstorage",
+        "store-supabase",
+        "store-mars-vault",
+        "system-github",
+        "system-lemon",
+        "system-vercel",
+        "system-apple-calendar",
+        "system-paperclip",
+        "system-lima-vm",
+        "system-claude-cli"
+      ],
+      "connectionIds": [
+        "conn-operator-renderer",
+        "conn-operator-webapi",
+        "conn-claude-mcp",
+        "conn-renderer-main",
+        "conn-renderer-webapi",
+        "conn-renderer-localstorage",
+        "conn-renderer-supabase",
+        "conn-main-crypto",
+        "conn-webapi-crypto",
+        "conn-crypto-files",
+        "conn-crypto-keychain",
+        "conn-main-integrations",
+        "conn-integrations-github",
+        "conn-integrations-lemon",
+        "conn-integrations-vercel",
+        "conn-integrations-supabase",
+        "conn-integrations-mars",
+        "conn-integrations-calendar",
+        "conn-integrations-paperclip",
+        "conn-webapi-limavm",
+        "conn-mcp-webapi",
+        "conn-launchd-radar",
+        "conn-radar-limavm",
+        "conn-radar-github",
+        "conn-radar-claude",
+        "conn-radar-webapi"
+      ],
+      "positions": {}
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow-claude-mcp-write",
+      "name": "Claude Reads/Writes via MCP",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-claude-mcp",
+          "description": "Claude calls a Cortex MCP tool (e.g. toggle_habit)"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-mcp-webapi",
+          "description": "MCP server proxies the call to localhost:3456 /api/data"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-webapi-crypto",
+          "description": "Web API routes the write through the encryption layer"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-crypto-keychain",
+          "description": "Crypto loads the 32-byte master key from the Keychain"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-crypto-files",
+          "description": "Data is sealed with AES-256-GCM into the local data file"
+        }
+      ]
+    },
+    {
+      "id": "flow-founder-metrics",
+      "name": "Founder Metrics Refresh",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-operator-renderer",
+          "description": "Operator opens the Founder page"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-renderer-main",
+          "description": "Renderer requests fresh stats over IPC"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-main-integrations",
+          "description": "Main invokes the integration fetchers"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-integrations-github",
+          "description": "Pulls commits, PRs & streak from GitHub"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-integrations-lemon",
+          "description": "Pulls MRR & subscriptions from Lemon Squeezy"
+        },
+        {
+          "order": 6,
+          "connectionId": "conn-integrations-vercel",
+          "description": "Pulls deployments & analytics from Vercel"
+        }
+      ]
+    },
+    {
+      "id": "flow-opportunity-radar",
+      "name": "Weekly Opportunity Radar (injection-safe)",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-launchd-radar",
+          "description": "launchd fires the weekly radar job"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-radar-limavm",
+          "description": "Scrapes X/Reddit/Devpost feeds via Apify on the Lima VM (untrusted output to a file)"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-radar-claude",
+          "description": "Tool-less `claude -p` classifies & scores hits against the profile"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-radar-webapi",
+          "description": "Validated, deduped survivors are POSTed to the Cortex store"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-webapi-crypto",
+          "description": "Opportunities are sealed into the encrypted store"
+        }
+      ]
+    },
+    {
+      "id": "flow-phone-tailscale",
+      "name": "Phone Access over Tailscale",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-operator-webapi",
+          "description": "Operator opens the :3456 PWA from phone over Tailscale"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-renderer-webapi",
+          "description": "The served renderer calls /api/data"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-webapi-crypto",
+          "description": "Web API decrypts the requested keys"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-crypto-files",
+          "description": "Reads the plaintext back from the encrypted data files"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1243 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "projectName": "omegahack",
+    "generatedAt": "2026-07-03T00:00:00.000Z",
+    "generatedBy": "claude-code",
+    "codebaseRoot": "/Users/pablo/Projects/omegahack"
+  },
+  "objects": [
+    {
+      "id": "actor-ciudadano",
+      "name": "Ciudadano",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "A resident of Medellin who files and tracks a PQRSD (peticion, queja, reclamo, sugerencia, denuncia) through the public portal or web form.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "actor-funcionario",
+      "name": "Funcionario Juridico",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "A legal-queue officer who triages, drafts and approves PQR responses against legal deadlines in the Workbench console.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "actor-secretaria",
+      "name": "Personal de Secretaria",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Sector staff of one of the 26 municipal secretarias who work their assigned PQR queue in the Secretaria console.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "actor-public",
+      "name": "Publico / Veeduria",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Citizens, press and oversight bodies who view anonymized PQR statistics on the public transparency dashboards.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "system-omegahack",
+      "name": "OmegaHack (CAROL)",
+      "type": "system",
+      "scope": "internal",
+      "status": "live",
+      "description": "Multi-agent PQRSD platform for the Alcaldia de Medellin that ingests, redacts, classifies, prioritizes and routes citizen requests with legal-deadline tracking.",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-turbo",
+          "name": "Turborepo"
+        },
+        {
+          "id": "tech-supabase",
+          "name": "Supabase"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "package.json",
+          "turbo.json",
+          "docs/arquitectura.md",
+          "CLAUDE.md"
+        ]
+      }
+    },
+    {
+      "id": "app-landing",
+      "name": "Landing / Portal",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Vite + TanStack Start marketing site and citizen intake portal whose radicar route POSTs PQRSD to the n8n webhook; deployed on Cloudflare.",
+      "parentId": "system-omegahack",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-react",
+          "name": "React"
+        },
+        {
+          "id": "tech-vite",
+          "name": "Vite"
+        },
+        {
+          "id": "tech-tanstack",
+          "name": "TanStack Start"
+        },
+        {
+          "id": "tech-tailwind",
+          "name": "Tailwind CSS"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/landing/src/routes/portal.radicar.tsx",
+          "apps/landing/package.json"
+        ]
+      }
+    },
+    {
+      "id": "app-web",
+      "name": "Web Publica",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Next.js public app hosting the citizen intake form and the /transparencia dashboards with Leaflet comuna maps and Recharts statistics.",
+      "parentId": "system-omegahack",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nextjs",
+          "name": "Next.js"
+        },
+        {
+          "id": "tech-react",
+          "name": "React"
+        },
+        {
+          "id": "tech-tailwind",
+          "name": "Tailwind CSS"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/web/app/",
+          "apps/web/components/",
+          "apps/web/lib/"
+        ]
+      }
+    },
+    {
+      "id": "app-workbench",
+      "name": "Workbench Juridico",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Next.js internal console where legal officers work the tenant PQR queue behind Supabase SSR auth and drive deadline calculations.",
+      "parentId": "system-omegahack",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nextjs",
+          "name": "Next.js"
+        },
+        {
+          "id": "tech-react",
+          "name": "React"
+        },
+        {
+          "id": "tech-supabase",
+          "name": "Supabase"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/workbench/",
+          "apps/workbench/package.json"
+        ]
+      }
+    },
+    {
+      "id": "app-secretaria",
+      "name": "Consola Secretaria",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Next.js sector console giving each secretaria its filtered PQR queue with remaining-deadline indicators from the deadline engine.",
+      "parentId": "system-omegahack",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nextjs",
+          "name": "Next.js"
+        },
+        {
+          "id": "tech-react",
+          "name": "React"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/secretaria/",
+          "apps/secretaria/package.json"
+        ]
+      }
+    },
+    {
+      "id": "comp-intake-agent",
+      "name": "Intake Agent",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Orchestrator that validates a PQR, computes radicado + source_hash idempotency, format-preserves text, redacts PII, runs validity and Art.16 gates, then classifies, prioritizes and deadlines it.",
+      "parentId": "system-omegahack",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "packages/intake-agent/src/orchestrator.ts",
+          "packages/intake-agent/src/format-preserve.ts",
+          "packages/intake-agent/src/validity.ts",
+          "packages/intake-agent/src/hash.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-classifier",
+      "name": "Classifier",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Calls Claude on PII-free text to return PQR tipo, one of 26 secretaria codes, comuna, thematic tags and auxiliary signals (respeto, anonimato, tutela risk).",
+      "parentId": "system-omegahack",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-anthropic",
+          "name": "Anthropic Claude"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "packages/classifier/src/claude.ts",
+          "packages/classifier/src/schemas.ts",
+          "packages/classifier/src/index.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-deadline-engine",
+      "name": "Deadline Engine",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Offline Colombian business-day deadline calculator covering Ley Emiliani holidays, Easter-derived days, per-tenant suspensions and the Ley 1755/2015 <=2x extension rule.",
+      "parentId": "system-omegahack",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "packages/deadline-engine/src/index.ts",
+          "packages/deadline-engine/src/business-days.ts",
+          "packages/deadline-engine/src/holidays.ts",
+          "packages/deadline-engine/src/plazos.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-habeas-data",
+      "name": "Habeas Data",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "PII redaction library that derives the raw / display / llm_text forms so citizen personal data never reaches the LLM or the public UI.",
+      "parentId": "system-omegahack",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "packages/habeas-data/src/redact-text.ts",
+          "packages/habeas-data/src/index.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-problem-groups",
+      "name": "Problem Groups",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Clusters same-tenant PQRs by embedding cosine similarity plus shared tags and matching comuna, flagging groups as hot when count/velocity thresholds are exceeded.",
+      "parentId": "system-omegahack",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "packages/problem-groups/src/index.ts",
+          "packages/problem-groups/src/tags.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-rag",
+      "name": "RAG",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Header-aware chunking, Azure 1024-dim embeddings, hybrid vector+FTS retriever and the Nella index/search client that renders PQRs into the omega-pqr-corpus.",
+      "parentId": "system-omegahack",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-azure",
+          "name": "Microsoft Azure"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "packages/rag/src/embedding.ts",
+          "packages/rag/src/retriever.ts",
+          "packages/rag/src/nella-client.ts",
+          "packages/rag/src/pqr-renderer.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-db",
+      "name": "DB Client",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Postgres/Supabase client factory exposing role-scoped connections that SET ROLE app_operational, app_qa_reader or service_role so RLS scopes every query by tenant.",
+      "parentId": "system-omegahack",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-supabase",
+          "name": "Supabase"
+        },
+        {
+          "id": "tech-postgres",
+          "name": "PostgreSQL"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "packages/db/src/supabase-client.ts",
+          "packages/db/src/index.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-edge-intake",
+      "name": "Edge: Intake Agent",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Supabase Deno edge function that wraps the intake-agent orchestrator so submissions can be processed server-side and written with the service role.",
+      "parentId": "system-omegahack",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-deno",
+          "name": "Deno"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "services/edge-functions/intake-agent/index.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-edge-indexer",
+      "name": "Edge: Nella Indexer",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Supabase Deno edge function (pqr-nella-indexer) that renders PQR rows and pushes them idempotently into the shared Nella omega-pqr-corpus bucket.",
+      "parentId": "system-omegahack",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-deno",
+          "name": "Deno"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "services/edge-functions/pqr-nella-indexer/index.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-edge-embed",
+      "name": "Edge: Embed Jobs",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Supabase Deno edge functions (qa-ingest, reembed-pqr) that drain embedding job queues, call Azure for 1024-dim vectors and upsert pgvector columns for the PQR and Q&A corpora.",
+      "parentId": "system-omegahack",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-deno",
+          "name": "Deno"
+        },
+        {
+          "id": "tech-azure",
+          "name": "Microsoft Azure"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "services/edge-functions/qa-ingest/index.ts",
+          "services/edge-functions/reembed-pqr/index.ts",
+          "services/edge-functions/reembed-pqr/embed.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-supabase",
+      "name": "Supabase Postgres",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "Single Postgres 16 with pgvector, RLS and per-tenant partitioning holding pqr, pqr_events, secretarias, comunas, tags, problem_groups and the qa_bank schema; also provides Auth.",
+      "technologies": [
+        {
+          "id": "tech-supabase",
+          "name": "Supabase"
+        },
+        {
+          "id": "tech-postgres",
+          "name": "PostgreSQL"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "supabase/migrations/20260418170200_core_pqr.sql",
+          "supabase/migrations/20260418170400_rls.sql",
+          "supabase/migrations/20260419110000_qa_schema.sql"
+        ]
+      }
+    },
+    {
+      "id": "system-anthropic",
+      "name": "Anthropic Claude API",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Claude messages API (claude-3-5-sonnet-latest) used by the classifier to grade validity and extract PQR structure from redacted text.",
+      "technologies": [
+        {
+          "id": "tech-anthropic",
+          "name": "Anthropic Claude"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "packages/classifier/src/claude.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-azure-embeddings",
+      "name": "Azure nella-embeddings",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Azure-hosted nella-embeddings deployment producing 1024-dim vectors for PQR and Q&A corpus semantic search.",
+      "technologies": [
+        {
+          "id": "tech-azure",
+          "name": "Microsoft Azure"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "packages/rag/src/embedding.ts",
+          "services/edge-functions/qa-ingest/embed.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-nella",
+      "name": "Nella Index API",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "External Nella retrieval/index service (NELLA_MCP_ENDPOINT) that stores and searches the omega-pqr-corpus bucket for cross-PQR knowledge retrieval.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "packages/rag/src/nella-client.ts",
+          "docs/nella-indexing.md"
+        ]
+      }
+    },
+    {
+      "id": "system-n8n",
+      "name": "n8n Cloud (Intake Workflow)",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Managed n8n host running the Los Compilados Intake Agent v3.2.4 workflow (Gemini validity + classifier agents) that receives portal PQRSD, persists them and triggers Nella backfill.",
+      "technologies": [
+        {
+          "id": "tech-n8n",
+          "name": "n8n"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "docs/n8n.md",
+          ".private/n8n/intake-agent-v3.2.4.sdk.ts",
+          "retos/mini_reto-valor/workflow.json"
+        ]
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn-ciudadano-landing",
+      "sourceId": "actor-ciudadano",
+      "targetId": "app-landing",
+      "label": "submits PQRSD via the public portal (radicar)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-ciudadano-web",
+      "sourceId": "actor-ciudadano",
+      "targetId": "app-web",
+      "label": "files PQRSD via the citizen intake form",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-public-web",
+      "sourceId": "actor-public",
+      "targetId": "app-web",
+      "label": "views /transparencia maps and charts",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-funcionario-workbench",
+      "sourceId": "actor-funcionario",
+      "targetId": "app-workbench",
+      "label": "triages the juridical PQR queue",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-secretaria-console",
+      "sourceId": "actor-secretaria",
+      "targetId": "app-secretaria",
+      "label": "works the sector PQR queue",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-landing-n8n",
+      "sourceId": "app-landing",
+      "targetId": "system-n8n",
+      "label": "POST /webhook/pqrs/intake",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-web-edge-intake",
+      "sourceId": "app-web",
+      "targetId": "comp-edge-intake",
+      "label": "POSTs citizen submissions to the intake function",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-web-db",
+      "sourceId": "app-web",
+      "targetId": "comp-db",
+      "label": "reads PQR / comuna aggregates (operational role)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-workbench-db",
+      "sourceId": "app-workbench",
+      "targetId": "comp-db",
+      "label": "reads and updates the PQR queue (operational role)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-secretaria-db",
+      "sourceId": "app-secretaria",
+      "targetId": "comp-db",
+      "label": "reads the sector PQR queue (operational role)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-workbench-deadline",
+      "sourceId": "app-workbench",
+      "targetId": "comp-deadline-engine",
+      "label": "computes and extends legal deadlines",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-secretaria-deadline",
+      "sourceId": "app-secretaria",
+      "targetId": "comp-deadline-engine",
+      "label": "renders remaining business-day deadline",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-workbench-auth",
+      "sourceId": "app-workbench",
+      "targetId": "store-supabase",
+      "label": "authenticates staff via Supabase SSR",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-db-supabase",
+      "sourceId": "comp-db",
+      "targetId": "store-supabase",
+      "label": "SET ROLE app_operational; RLS filters by tenant_id",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-edge-intake-orchestrator",
+      "sourceId": "comp-edge-intake",
+      "targetId": "comp-intake-agent",
+      "label": "invokes the intake orchestrator (Deno)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-intake-habeas",
+      "sourceId": "comp-intake-agent",
+      "targetId": "comp-habeas-data",
+      "label": "redacts PII into raw / display / llm text",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-intake-classifier",
+      "sourceId": "comp-intake-agent",
+      "targetId": "comp-classifier",
+      "label": "classifies redacted text (tipo, secretaria, comuna, tags)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-intake-deadline",
+      "sourceId": "comp-intake-agent",
+      "targetId": "comp-deadline-engine",
+      "label": "computes priority and legal deadline",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-intake-groups",
+      "sourceId": "comp-intake-agent",
+      "targetId": "comp-problem-groups",
+      "label": "assigns or updates the problem group",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-classifier-anthropic",
+      "sourceId": "comp-classifier",
+      "targetId": "system-anthropic",
+      "label": "calls Claude messages API (claude-3-5-sonnet)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-edge-intake-supabase",
+      "sourceId": "comp-edge-intake",
+      "targetId": "store-supabase",
+      "label": "inserts pqr + pqr_events (service role)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-edge-intake-indexer",
+      "sourceId": "comp-edge-intake",
+      "targetId": "comp-edge-indexer",
+      "label": "fire-and-forget index after insert",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-indexer-rag",
+      "sourceId": "comp-edge-indexer",
+      "targetId": "comp-rag",
+      "label": "renders PQR as a Nella doc and batch-indexes",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-rag-nella",
+      "sourceId": "comp-rag",
+      "targetId": "system-nella",
+      "label": "indexes / searches omega-pqr-corpus (MCP endpoint)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-rag-azure",
+      "sourceId": "comp-rag",
+      "targetId": "system-azure-embeddings",
+      "label": "embeds text for hybrid retrieval",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-edge-embed-azure",
+      "sourceId": "comp-edge-embed",
+      "targetId": "system-azure-embeddings",
+      "label": "generates 1024-dim embeddings",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-edge-embed-supabase",
+      "sourceId": "comp-edge-embed",
+      "targetId": "store-supabase",
+      "label": "upserts pgvector embeddings (pqr / qa_bank)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-groups-db",
+      "sourceId": "comp-problem-groups",
+      "targetId": "comp-db",
+      "label": "reads embeddings + tags for cosine clustering",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-n8n-supabase",
+      "sourceId": "system-n8n",
+      "targetId": "store-supabase",
+      "label": "inserts pqr + pqr_events (service role)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-n8n-indexer",
+      "sourceId": "system-n8n",
+      "targetId": "comp-edge-indexer",
+      "label": "indexes PQR in Nella (post-insert + 30-min backfill)",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-ciudadano-omega",
+      "sourceId": "actor-ciudadano",
+      "targetId": "system-omegahack",
+      "label": "files and tracks PQRSD",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-funcionario-omega",
+      "sourceId": "actor-funcionario",
+      "targetId": "system-omegahack",
+      "label": "triages the juridical queue",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-secretaria-omega",
+      "sourceId": "actor-secretaria",
+      "targetId": "system-omegahack",
+      "label": "resolves sector PQRs",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-public-omega",
+      "sourceId": "actor-public",
+      "targetId": "system-omegahack",
+      "label": "views transparency dashboards",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-omega-supabase",
+      "sourceId": "system-omegahack",
+      "targetId": "store-supabase",
+      "label": "persists PQR data (pgvector, RLS, multi-tenant)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-omega-anthropic",
+      "sourceId": "system-omegahack",
+      "targetId": "system-anthropic",
+      "label": "classifies PQRs with Claude",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-omega-azure",
+      "sourceId": "system-omegahack",
+      "targetId": "system-azure-embeddings",
+      "label": "generates embeddings",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-omega-nella",
+      "sourceId": "system-omegahack",
+      "targetId": "system-nella",
+      "label": "indexes / retrieves PQR corpus",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-omega-n8n",
+      "sourceId": "system-omegahack",
+      "targetId": "system-n8n",
+      "label": "delegates public intake + backfill (Gemini workflow)",
+      "status": "live",
+      "type": "async"
+    }
+  ],
+  "groups": [
+    {
+      "id": "group-actors",
+      "name": "Actors",
+      "objectIds": [
+        "actor-ciudadano",
+        "actor-funcionario",
+        "actor-secretaria",
+        "actor-public"
+      ]
+    },
+    {
+      "id": "group-apps",
+      "name": "Applications",
+      "objectIds": [
+        "app-landing",
+        "app-web",
+        "app-workbench",
+        "app-secretaria"
+      ]
+    },
+    {
+      "id": "group-agents",
+      "name": "Agent Pipeline",
+      "objectIds": [
+        "comp-intake-agent",
+        "comp-classifier",
+        "comp-habeas-data",
+        "comp-deadline-engine",
+        "comp-problem-groups",
+        "comp-rag"
+      ]
+    },
+    {
+      "id": "group-platform",
+      "name": "Platform & Data Access",
+      "objectIds": [
+        "comp-db",
+        "comp-edge-intake",
+        "comp-edge-indexer",
+        "comp-edge-embed",
+        "store-supabase"
+      ]
+    },
+    {
+      "id": "group-external",
+      "name": "External Services",
+      "objectIds": [
+        "system-anthropic",
+        "system-azure-embeddings",
+        "system-nella",
+        "system-n8n"
+      ]
+    }
+  ],
+  "technologies": [
+    {
+      "id": "tech-typescript",
+      "name": "TypeScript",
+      "color": "#3178c6",
+      "category": "language"
+    },
+    {
+      "id": "tech-nodejs",
+      "name": "Node.js",
+      "color": "#339933",
+      "category": "tool"
+    },
+    {
+      "id": "tech-nextjs",
+      "name": "Next.js",
+      "color": "#000000",
+      "category": "framework"
+    },
+    {
+      "id": "tech-react",
+      "name": "React",
+      "color": "#61dafb",
+      "category": "framework"
+    },
+    {
+      "id": "tech-vite",
+      "name": "Vite",
+      "color": "#646cff",
+      "category": "tool"
+    },
+    {
+      "id": "tech-tanstack",
+      "name": "TanStack Start",
+      "color": "#ff4154",
+      "category": "framework"
+    },
+    {
+      "id": "tech-tailwind",
+      "name": "Tailwind CSS",
+      "color": "#06b6d4",
+      "category": "framework"
+    },
+    {
+      "id": "tech-supabase",
+      "name": "Supabase",
+      "color": "#3ecf8e",
+      "category": "service"
+    },
+    {
+      "id": "tech-postgres",
+      "name": "PostgreSQL",
+      "color": "#336791",
+      "category": "database"
+    },
+    {
+      "id": "tech-deno",
+      "name": "Deno",
+      "color": "#70ffaf",
+      "category": "tool"
+    },
+    {
+      "id": "tech-anthropic",
+      "name": "Anthropic Claude",
+      "color": "#d97757",
+      "category": "service"
+    },
+    {
+      "id": "tech-azure",
+      "name": "Microsoft Azure",
+      "color": "#0078d4",
+      "category": "service"
+    },
+    {
+      "id": "tech-n8n",
+      "name": "n8n",
+      "color": "#ea4b71",
+      "category": "service"
+    },
+    {
+      "id": "tech-turbo",
+      "name": "Turborepo",
+      "color": "#ef4444",
+      "category": "tool"
+    }
+  ],
+  "tags": [],
+  "diagrams": [
+    {
+      "id": "diagram-context",
+      "name": "System Context",
+      "level": 1,
+      "objectIds": [
+        "actor-ciudadano",
+        "actor-funcionario",
+        "actor-secretaria",
+        "actor-public",
+        "system-omegahack",
+        "store-supabase",
+        "system-anthropic",
+        "system-azure-embeddings",
+        "system-nella",
+        "system-n8n"
+      ],
+      "connectionIds": [
+        "conn-l1-ciudadano-omega",
+        "conn-l1-funcionario-omega",
+        "conn-l1-secretaria-omega",
+        "conn-l1-public-omega",
+        "conn-l1-omega-supabase",
+        "conn-l1-omega-anthropic",
+        "conn-l1-omega-azure",
+        "conn-l1-omega-nella",
+        "conn-l1-omega-n8n"
+      ],
+      "positions": {}
+    },
+    {
+      "id": "diagram-container",
+      "name": "Container",
+      "level": 2,
+      "objectIds": [
+        "actor-ciudadano",
+        "actor-funcionario",
+        "actor-secretaria",
+        "actor-public",
+        "app-landing",
+        "app-web",
+        "app-workbench",
+        "app-secretaria",
+        "comp-intake-agent",
+        "comp-classifier",
+        "comp-deadline-engine",
+        "comp-habeas-data",
+        "comp-problem-groups",
+        "comp-rag",
+        "comp-db",
+        "comp-edge-intake",
+        "comp-edge-indexer",
+        "comp-edge-embed",
+        "store-supabase",
+        "system-anthropic",
+        "system-azure-embeddings",
+        "system-nella",
+        "system-n8n"
+      ],
+      "connectionIds": [
+        "conn-ciudadano-landing",
+        "conn-ciudadano-web",
+        "conn-public-web",
+        "conn-funcionario-workbench",
+        "conn-secretaria-console",
+        "conn-landing-n8n",
+        "conn-web-edge-intake",
+        "conn-web-db",
+        "conn-workbench-db",
+        "conn-secretaria-db",
+        "conn-workbench-deadline",
+        "conn-secretaria-deadline",
+        "conn-workbench-auth",
+        "conn-db-supabase",
+        "conn-edge-intake-orchestrator",
+        "conn-intake-habeas",
+        "conn-intake-classifier",
+        "conn-intake-deadline",
+        "conn-intake-groups",
+        "conn-classifier-anthropic",
+        "conn-edge-intake-supabase",
+        "conn-edge-intake-indexer",
+        "conn-indexer-rag",
+        "conn-rag-nella",
+        "conn-rag-azure",
+        "conn-edge-embed-azure",
+        "conn-edge-embed-supabase",
+        "conn-groups-db",
+        "conn-n8n-supabase",
+        "conn-n8n-indexer"
+      ],
+      "positions": {}
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow-intake-web",
+      "name": "Citizen Intake (Web Form)",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-web-edge-intake",
+          "description": "Citizen submits the form; the web app POSTs it to the intake edge function"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-edge-intake-orchestrator",
+          "description": "The edge function invokes the intake-agent orchestrator"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-intake-habeas",
+          "description": "PII is redacted into raw / display / llm_text forms"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-intake-classifier",
+          "description": "The classifier extracts tipo, secretaria, comuna and tags"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-classifier-anthropic",
+          "description": "Classification runs against the Claude messages API"
+        },
+        {
+          "order": 6,
+          "connectionId": "conn-intake-deadline",
+          "description": "The priority engine computes the legal business-day deadline"
+        },
+        {
+          "order": 7,
+          "connectionId": "conn-edge-intake-supabase",
+          "description": "The edge function inserts pqr + pqr_events under the service role"
+        },
+        {
+          "order": 8,
+          "connectionId": "conn-edge-intake-indexer",
+          "description": "A fire-and-forget indexing job is enqueued"
+        }
+      ]
+    },
+    {
+      "id": "flow-intake-n8n",
+      "name": "Citizen Intake (n8n Portal Workflow)",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-landing-n8n",
+          "description": "The portal POSTs the PQRSD to the n8n webhook /pqrs/intake"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-n8n-supabase",
+          "description": "The n8n workflow classifies with Gemini agents and inserts pqr + pqr_events"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-n8n-indexer",
+          "description": "n8n calls the pqr-nella-indexer edge function"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-indexer-rag",
+          "description": "The indexer renders the PQR as a Nella doc"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-rag-nella",
+          "description": "The RAG client indexes it into the omega-pqr-corpus bucket"
+        }
+      ]
+    },
+    {
+      "id": "flow-officer-queue",
+      "name": "Officer Triage & Deadline",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-funcionario-workbench",
+          "description": "The officer opens the juridical queue in the workbench"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-workbench-auth",
+          "description": "The workbench authenticates the officer via Supabase SSR"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-workbench-db",
+          "description": "The workbench reads the tenant PQR queue with the operational client"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-db-supabase",
+          "description": "The client SET ROLE app_operational and RLS filters rows by tenant_id"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-workbench-deadline",
+          "description": "The deadline engine shows remaining business days and any extension"
+        }
+      ]
+    },
+    {
+      "id": "flow-transparencia",
+      "name": "Public Transparency View",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-public-web",
+          "description": "A member of the public opens /transparencia"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-web-db",
+          "description": "The web app reads aggregated PQR stats by comuna and secretaria"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-db-supabase",
+          "description": "The operational client queries the transparency views under RLS"
+        }
+      ]
+    }
+  ]
+}
