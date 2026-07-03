@@ -1,0 +1,1076 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "projectName": "content-pipeline",
+    "generatedAt": "2026-07-03T00:00:00.000Z",
+    "generatedBy": "claude-code",
+    "codebaseRoot": "/Users/pablo/Projects/content-pipeline"
+  },
+  "objects": [
+    {
+      "id": "actor-operator",
+      "name": "Operator (Pablo)",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Solo operator who plans and manages the whole content pipeline (ideas, scripts, drafts, posts, outbound, watchlist) through the desktop dashboard.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "actor-claude-code",
+      "name": "Claude Code Agent",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Claude Code plus its skills (script-pack, voice-post) that poll the Actions queue and write scripted videos and drafts back through the HTTP API.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "system-content-pipeline",
+      "name": "Content Pipeline",
+      "type": "system",
+      "scope": "internal",
+      "status": "live",
+      "description": "Local-first macOS content operations hub that plans short-form video and post content, syncs the Mars Obsidian vault, tracks leads, and drives the OpenClaw VM autonomous pipeline.",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-electron",
+          "name": "Electron"
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "app-electron",
+      "name": "Electron Shell",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "macOS desktop shell (menu-bar app, tray, single-instance lock) that forks and supervises the API server and loads the React dashboard in a BrowserWindow.",
+      "parentId": "system-content-pipeline",
+      "technologies": [
+        {
+          "id": "tech-electron",
+          "name": "Electron"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "electron/main.ts",
+          "electron/preload.ts",
+          "electron-entry.cjs"
+        ]
+      }
+    },
+    {
+      "id": "app-web-ui",
+      "name": "Dashboard SPA",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "React 19 single-page dashboard (Vite + Tailwind + Framer Motion) with Pipeline, Posts, Videos, Ideas, Outbound, Watchlist, and Ops views.",
+      "parentId": "system-content-pipeline",
+      "technologies": [
+        {
+          "id": "tech-react",
+          "name": "React"
+        },
+        {
+          "id": "tech-vite",
+          "name": "Vite"
+        },
+        {
+          "id": "tech-tailwind",
+          "name": "Tailwind CSS"
+        },
+        {
+          "id": "tech-framer",
+          "name": "Framer Motion"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/App.tsx",
+          "src/pages/",
+          "src/components/",
+          "src/lib/api.ts"
+        ]
+      }
+    },
+    {
+      "id": "app-api-server",
+      "name": "API Server",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Express server on port 3010 (localhost + Tailscale gated) exposing REST endpoints for content, media, memory, watchlist, search, and VM control.",
+      "parentId": "system-content-pipeline",
+      "technologies": [
+        {
+          "id": "tech-express",
+          "name": "Express"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "server/index.ts",
+          "server/storage.ts"
+        ]
+      }
+    },
+    {
+      "id": "component-obsidian-sync",
+      "name": "Obsidian Sync",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Round-trips posts, videos, runs, DMs, replies, and voice anchors between the pipeline and the Mars Obsidian vault as human-editable markdown.",
+      "parentId": "app-api-server",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "server/obsidian-sync.ts"
+        ]
+      }
+    },
+    {
+      "id": "component-memory",
+      "name": "Memory Vault",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Reads and writes the OpenClaw memory vault (leads, entities, insights, self-context) and recalls context via the VM memory-RAG /recall service.",
+      "parentId": "app-api-server",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "server/memory.ts"
+        ]
+      }
+    },
+    {
+      "id": "component-watchlist",
+      "name": "Watchlist Radar",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Manages the tiered watchlist-radar handles in Supabase and parses the viral-watchlist creators from the Mars vault frontmatter.",
+      "parentId": "app-api-server",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "server/watchlist.ts",
+          "server/viral-sync.ts"
+        ]
+      }
+    },
+    {
+      "id": "component-vm-admin",
+      "name": "VM Admin Proxy",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Proxies to the OpenClaw VM to start/stop the classifier and drafter worker pools and to fire the Paperclip Weekly Content Batch routine.",
+      "parentId": "app-api-server",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "server/openclaw-admin.ts",
+          "server/paperclip.ts"
+        ]
+      }
+    },
+    {
+      "id": "component-search",
+      "name": "Algolia Search",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Indexes leads, DMs, and voice anchors into Algolia and serves search queries through admin-tier REST routes that never run in the browser.",
+      "parentId": "app-api-server",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-algolia",
+          "name": "Algolia"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "server/algolia.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-json",
+      "name": "Local JSON Store",
+      "type": "store",
+      "scope": "internal",
+      "status": "live",
+      "description": "Per-project JSON document store (data/projects/<id>/*.json) for videos, ideas, clips, posts, actions, templates, and generator runs — the primary datastore.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "data/",
+          "server/storage.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-mars-vault",
+      "name": "Mars Obsidian Vault",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "Pablo's Mars Obsidian vault — markdown source of truth for published posts, video scripts, voice anchors, and content runs.",
+      "technologies": [
+        {
+          "id": "tech-obsidian",
+          "name": "Obsidian"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "/Users/pablo/Projects/Mars/Mars/content"
+        ]
+      }
+    },
+    {
+      "id": "store-openclaw-memory",
+      "name": "OpenClaw Memory Vault",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "Markdown memory vault of leads, entities, insights, and self-context shared with the OpenClaw outbound pipeline.",
+      "technologies": [
+        {
+          "id": "tech-obsidian",
+          "name": "Obsidian"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "/Users/pablo/Projects/openclaw-memory"
+        ]
+      }
+    },
+    {
+      "id": "store-media",
+      "name": "Media Library",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "Local media library (~/Projects/media) holding b-roll, clips, and images catalogued per project by the b-roll module.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "/Users/pablo/Projects/media",
+          "server/brolls.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-icloud",
+      "name": "iCloud Drive Mirror",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "iCloud Drive folder that best-effort mirrors data/*.json and Mars content so the pipeline is readable across Pablo's devices.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "store-supabase",
+      "name": "Supabase",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "Supabase Postgres backing the watchlist_handles table that the VM watchlist-radar worker reads and polls.",
+      "technologies": [
+        {
+          "id": "tech-supabase",
+          "name": "Supabase"
+        },
+        {
+          "id": "tech-postgresql",
+          "name": "PostgreSQL"
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "system-openclaw-vm",
+      "name": "OpenClaw VM",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Residential Tailscale VM running the OpenClaw autonomous pipeline: classifier/drafter worker pools, admin-control API, viral-shorts renderer, and memory-RAG recall.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "system-paperclip",
+      "name": "Paperclip",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Paperclip automation instance on the OpenClaw VM that runs the scheduled Weekly Content Batch routine on demand.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "server/paperclip.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-cortex",
+      "name": "Cortex App",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Cortex desktop app (localhost:3456) that bi-directionally syncs the daily content plan and task state with the pipeline.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "system-algolia",
+      "name": "Algolia",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Hosted Algolia search service indexing leads, DMs, and voice anchors for fast lookup from the dashboard.",
+      "technologies": [
+        {
+          "id": "tech-algolia",
+          "name": "Algolia"
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "system-pushover",
+      "name": "Pushover",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Pushover push-notification service used to alert Pablo when a platform posting cap is reached.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "server/notifications.ts"
+        ]
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn-operator-electron",
+      "sourceId": "actor-operator",
+      "targetId": "app-electron",
+      "label": "launches the macOS desktop app",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-operator-webui",
+      "sourceId": "actor-operator",
+      "targetId": "app-web-ui",
+      "label": "plans and edits content in the dashboard",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-claudecode-api",
+      "sourceId": "actor-claude-code",
+      "targetId": "app-api-server",
+      "label": "polls Actions queue, writes scripts/drafts via REST",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-electron-webui",
+      "sourceId": "app-electron",
+      "targetId": "app-web-ui",
+      "label": "loads the SPA in a BrowserWindow",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-electron-api",
+      "sourceId": "app-electron",
+      "targetId": "app-api-server",
+      "label": "forks and supervises the API server process",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-webui-api",
+      "sourceId": "app-web-ui",
+      "targetId": "app-api-server",
+      "label": "calls REST endpoints under /api",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-obsidian",
+      "sourceId": "app-api-server",
+      "targetId": "component-obsidian-sync",
+      "label": "delegates vault read/write",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-memory",
+      "sourceId": "app-api-server",
+      "targetId": "component-memory",
+      "label": "delegates lead/entity memory",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-watchlist",
+      "sourceId": "app-api-server",
+      "targetId": "component-watchlist",
+      "label": "delegates watchlist CRUD",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-vmadmin",
+      "sourceId": "app-api-server",
+      "targetId": "component-vm-admin",
+      "label": "delegates VM pool control",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-search",
+      "sourceId": "app-api-server",
+      "targetId": "component-search",
+      "label": "delegates search + indexing",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-obsidian-marsvault",
+      "sourceId": "component-obsidian-sync",
+      "targetId": "store-mars-vault",
+      "label": "reads/writes posts, videos, voice-anchor markdown",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-obsidian-icloud",
+      "sourceId": "component-obsidian-sync",
+      "targetId": "store-icloud",
+      "label": "mirrors Mars content for cross-device sync",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-memory-openclawmem",
+      "sourceId": "component-memory",
+      "targetId": "store-openclaw-memory",
+      "label": "CRUD leads, entities, insights markdown",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-memory-vm",
+      "sourceId": "component-memory",
+      "targetId": "system-openclaw-vm",
+      "label": "recalls context via memory-RAG /recall",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-watchlist-supabase",
+      "sourceId": "component-watchlist",
+      "targetId": "store-supabase",
+      "label": "CRUD watchlist_handles rows",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-search-algolia",
+      "sourceId": "component-search",
+      "targetId": "system-algolia",
+      "label": "indexes and queries leads/dms/voice-anchors",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-vmadmin-vm",
+      "sourceId": "component-vm-admin",
+      "targetId": "system-openclaw-vm",
+      "label": "starts/stops classifier + drafter pools",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-vmadmin-paperclip",
+      "sourceId": "component-vm-admin",
+      "targetId": "system-paperclip",
+      "label": "triggers Weekly Content Batch routine",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-vm-supabase",
+      "sourceId": "system-openclaw-vm",
+      "targetId": "store-supabase",
+      "label": "watchlist-radar worker reads handles",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-json",
+      "sourceId": "app-api-server",
+      "targetId": "store-json",
+      "label": "persists videos/ideas/posts/actions",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-media",
+      "sourceId": "app-api-server",
+      "targetId": "store-media",
+      "label": "catalogs and serves b-roll and clips",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-icloud",
+      "sourceId": "app-api-server",
+      "targetId": "store-icloud",
+      "label": "mirrors data/*.json best-effort",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-api-cortex",
+      "sourceId": "app-api-server",
+      "targetId": "system-cortex",
+      "label": "bi-directional daily content sync",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-api-pushover",
+      "sourceId": "app-api-server",
+      "targetId": "system-pushover",
+      "label": "sends cap-alert push notifications",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-api-vmshorts",
+      "sourceId": "app-api-server",
+      "targetId": "system-openclaw-vm",
+      "label": "dispatches viral-shorts render jobs",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-operator-cp",
+      "sourceId": "actor-operator",
+      "targetId": "system-content-pipeline",
+      "label": "plans and manages content",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-claudecode-cp",
+      "sourceId": "actor-claude-code",
+      "targetId": "system-content-pipeline",
+      "label": "drafts scripts, drains Actions queue",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-cp-marsvault",
+      "sourceId": "system-content-pipeline",
+      "targetId": "store-mars-vault",
+      "label": "syncs posts, scripts, voice anchors",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-cp-openclawmem",
+      "sourceId": "system-content-pipeline",
+      "targetId": "store-openclaw-memory",
+      "label": "reads/writes lead + entity memory",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-cp-supabase",
+      "sourceId": "system-content-pipeline",
+      "targetId": "store-supabase",
+      "label": "manages watchlist handles",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-cp-media",
+      "sourceId": "system-content-pipeline",
+      "targetId": "store-media",
+      "label": "catalogs b-roll and clips",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-cp-icloud",
+      "sourceId": "system-content-pipeline",
+      "targetId": "store-icloud",
+      "label": "mirrors data across devices",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-cp-vm",
+      "sourceId": "system-content-pipeline",
+      "targetId": "system-openclaw-vm",
+      "label": "controls pools, recalls memory, renders shorts",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-cp-paperclip",
+      "sourceId": "system-content-pipeline",
+      "targetId": "system-paperclip",
+      "label": "fires Weekly Content Batch",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-cp-cortex",
+      "sourceId": "system-content-pipeline",
+      "targetId": "system-cortex",
+      "label": "syncs daily plan and tasks",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-cp-algolia",
+      "sourceId": "system-content-pipeline",
+      "targetId": "system-algolia",
+      "label": "indexes and searches leads/dms",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-cp-pushover",
+      "sourceId": "system-content-pipeline",
+      "targetId": "system-pushover",
+      "label": "sends cap alerts",
+      "status": "live",
+      "type": "async"
+    }
+  ],
+  "groups": [
+    {
+      "id": "group-clients",
+      "name": "Desktop Client",
+      "objectIds": [
+        "app-electron",
+        "app-web-ui"
+      ]
+    },
+    {
+      "id": "group-backend",
+      "name": "API Server & Components",
+      "objectIds": [
+        "app-api-server",
+        "component-obsidian-sync",
+        "component-memory",
+        "component-watchlist",
+        "component-vm-admin",
+        "component-search"
+      ]
+    },
+    {
+      "id": "group-stores",
+      "name": "Data Stores",
+      "objectIds": [
+        "store-json",
+        "store-mars-vault",
+        "store-openclaw-memory",
+        "store-media",
+        "store-icloud",
+        "store-supabase"
+      ]
+    },
+    {
+      "id": "group-vm",
+      "name": "OpenClaw VM Pipeline",
+      "objectIds": [
+        "system-openclaw-vm",
+        "system-paperclip"
+      ]
+    },
+    {
+      "id": "group-services",
+      "name": "External Services",
+      "objectIds": [
+        "system-cortex",
+        "system-algolia",
+        "system-pushover"
+      ]
+    }
+  ],
+  "technologies": [
+    {
+      "id": "tech-typescript",
+      "name": "TypeScript",
+      "color": "#3178c6",
+      "category": "language"
+    },
+    {
+      "id": "tech-nodejs",
+      "name": "Node.js",
+      "color": "#339933",
+      "category": "runtime"
+    },
+    {
+      "id": "tech-react",
+      "name": "React",
+      "color": "#61dafb",
+      "category": "framework"
+    },
+    {
+      "id": "tech-vite",
+      "name": "Vite",
+      "color": "#646cff",
+      "category": "tool"
+    },
+    {
+      "id": "tech-tailwind",
+      "name": "Tailwind CSS",
+      "color": "#38bdf8",
+      "category": "framework"
+    },
+    {
+      "id": "tech-framer",
+      "name": "Framer Motion",
+      "color": "#ff0080",
+      "category": "framework"
+    },
+    {
+      "id": "tech-electron",
+      "name": "Electron",
+      "color": "#47848f",
+      "category": "framework"
+    },
+    {
+      "id": "tech-express",
+      "name": "Express",
+      "color": "#000000",
+      "category": "framework"
+    },
+    {
+      "id": "tech-supabase",
+      "name": "Supabase",
+      "color": "#3ecf8e",
+      "category": "platform"
+    },
+    {
+      "id": "tech-postgresql",
+      "name": "PostgreSQL",
+      "color": "#336791",
+      "category": "database"
+    },
+    {
+      "id": "tech-algolia",
+      "name": "Algolia",
+      "color": "#003dff",
+      "category": "service"
+    },
+    {
+      "id": "tech-obsidian",
+      "name": "Obsidian",
+      "color": "#7c3aed",
+      "category": "tool"
+    }
+  ],
+  "tags": [],
+  "diagrams": [
+    {
+      "id": "diagram-context",
+      "name": "System Context",
+      "level": 1,
+      "objectIds": [
+        "actor-operator",
+        "actor-claude-code",
+        "system-content-pipeline",
+        "store-mars-vault",
+        "store-openclaw-memory",
+        "store-supabase",
+        "store-media",
+        "store-icloud",
+        "system-openclaw-vm",
+        "system-paperclip",
+        "system-cortex",
+        "system-algolia",
+        "system-pushover"
+      ],
+      "connectionIds": [
+        "conn-l1-operator-cp",
+        "conn-l1-claudecode-cp",
+        "conn-l1-cp-marsvault",
+        "conn-l1-cp-openclawmem",
+        "conn-l1-cp-supabase",
+        "conn-l1-cp-media",
+        "conn-l1-cp-icloud",
+        "conn-l1-cp-vm",
+        "conn-l1-cp-paperclip",
+        "conn-l1-cp-cortex",
+        "conn-l1-cp-algolia",
+        "conn-l1-cp-pushover"
+      ],
+      "positions": {}
+    },
+    {
+      "id": "diagram-container",
+      "name": "Container",
+      "level": 2,
+      "objectIds": [
+        "actor-operator",
+        "actor-claude-code",
+        "app-electron",
+        "app-web-ui",
+        "app-api-server",
+        "component-obsidian-sync",
+        "component-memory",
+        "component-watchlist",
+        "component-vm-admin",
+        "component-search",
+        "store-json",
+        "store-mars-vault",
+        "store-openclaw-memory",
+        "store-media",
+        "store-icloud",
+        "store-supabase",
+        "system-openclaw-vm",
+        "system-paperclip",
+        "system-cortex",
+        "system-algolia",
+        "system-pushover"
+      ],
+      "connectionIds": [
+        "conn-operator-electron",
+        "conn-operator-webui",
+        "conn-claudecode-api",
+        "conn-electron-webui",
+        "conn-electron-api",
+        "conn-webui-api",
+        "conn-api-obsidian",
+        "conn-api-memory",
+        "conn-api-watchlist",
+        "conn-api-vmadmin",
+        "conn-api-search",
+        "conn-obsidian-marsvault",
+        "conn-obsidian-icloud",
+        "conn-memory-openclawmem",
+        "conn-memory-vm",
+        "conn-watchlist-supabase",
+        "conn-search-algolia",
+        "conn-vmadmin-vm",
+        "conn-vmadmin-paperclip",
+        "conn-vm-supabase",
+        "conn-api-json",
+        "conn-api-media",
+        "conn-api-icloud",
+        "conn-api-cortex",
+        "conn-api-pushover",
+        "conn-api-vmshorts"
+      ],
+      "positions": {}
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow-script-pack",
+      "name": "Script Pack Generation",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-claudecode-api",
+          "description": "Claude Code /script-pack pulls pipeline state and voice context via the REST API"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-api-obsidian",
+          "description": "API server delegates to Obsidian Sync to load voice anchors"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-obsidian-marsvault",
+          "description": "Obsidian Sync reads voice-anchor markdown from the Mars vault"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-api-json",
+          "description": "Approved scripts are written back as scripted-status video records in the JSON store"
+        }
+      ]
+    },
+    {
+      "id": "flow-post-sync",
+      "name": "Post Draft to Vault",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-operator-webui",
+          "description": "Operator edits a post in the dashboard"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-webui-api",
+          "description": "SPA PATCHes the post through the REST API"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-api-obsidian",
+          "description": "API server delegates to Obsidian Sync"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-obsidian-marsvault",
+          "description": "Post is written as markdown into the Mars vault"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-obsidian-icloud",
+          "description": "Content is mirrored to iCloud for cross-device access"
+        }
+      ]
+    },
+    {
+      "id": "flow-watchlist-radar",
+      "name": "Watchlist Radar",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-operator-webui",
+          "description": "Operator adds a handle to the tiered watchlist"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-webui-api",
+          "description": "SPA POSTs to /api/watchlist"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-api-watchlist",
+          "description": "API server delegates to the Watchlist Radar component"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-watchlist-supabase",
+          "description": "Handle is upserted into the Supabase watchlist_handles table"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-vm-supabase",
+          "description": "The VM watchlist-radar worker reads the handle and begins polling X/LinkedIn"
+        }
+      ]
+    },
+    {
+      "id": "flow-vm-control",
+      "name": "Worker Pool Control",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-operator-webui",
+          "description": "Operator opens the Ops page and starts the drafter pool"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-webui-api",
+          "description": "SPA calls /api/openclaw/pool/drafter/start"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-api-vmadmin",
+          "description": "API server delegates to the VM Admin Proxy"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-vmadmin-vm",
+          "description": "Proxy calls the OpenClaw admin-control API to start the pool over Tailscale"
+        }
+      ]
+    }
+  ]
+}

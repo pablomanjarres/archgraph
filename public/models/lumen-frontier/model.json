@@ -1,0 +1,883 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "projectName": "lumen-frontier",
+    "generatedAt": "2026-07-03T00:00:00.000Z",
+    "generatedBy": "claude-code",
+    "codebaseRoot": "/Users/pablo/.claude/jobs/90084b71/tmp/lumen-deploy"
+  },
+  "objects": [
+    {
+      "id": "actor-learner",
+      "name": "Learner",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Student who explores their study material either through the LumenOS widget dashboard or by flying the Lumenverse 3D space as a tethered astronaut.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "actor-developer",
+      "name": "Developer",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Developer who runs the app locally with npm run dev:frontend and ships the static build to Vercel with vercel --prod.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "system-lumen-frontier",
+      "name": "Lumen Frontier",
+      "type": "system",
+      "scope": "internal",
+      "status": "live",
+      "description": "Front-end learning product that turns studying into a place — a drag-and-drop widget OS and a first-person 3D galaxy of subjects — with a scaffolded backend for future auth and sync.",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-astro",
+          "name": "Astro"
+        },
+        {
+          "id": "tech-react",
+          "name": "React"
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "id": "app-web-shell",
+      "name": "Astro Web Shell",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Astro 4 static site that renders the landing page plus the /dashboard and /lumenverse routes, hydrating React only where interactivity is needed (islands).",
+      "parentId": "system-lumen-frontier",
+      "technologies": [
+        {
+          "id": "tech-astro",
+          "name": "Astro"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-tailwind",
+          "name": "Tailwind CSS"
+        },
+        {
+          "id": "tech-vite",
+          "name": "Vite"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/frontend/src/pages/index.astro",
+          "apps/frontend/src/pages/dashboard.astro",
+          "apps/frontend/src/pages/lumenverse.astro",
+          "apps/frontend/src/layouts/",
+          "apps/frontend/astro.config.mjs"
+        ]
+      }
+    },
+    {
+      "id": "app-lumenos",
+      "name": "LumenOS Dashboard",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Client-only React island providing a desktop-style canvas of draggable, resizable study widgets with an edit mode, custom background, and a widget marketplace.",
+      "parentId": "system-lumen-frontier",
+      "technologies": [
+        {
+          "id": "tech-react",
+          "name": "React"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nanostores",
+          "name": "Nanostores"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/frontend/src/features/lumen-os/dashboard/Dashboard.tsx",
+          "apps/frontend/src/features/lumen-os/dashboard/components/layout/"
+        ]
+      }
+    },
+    {
+      "id": "app-lumenverse",
+      "name": "Lumenverse 3D Explorer",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Client:load React island rendering a 985-line Three.js scene where each subject is a glowing planet flown to as an astronaut with pointer-lock look and WASD flight.",
+      "parentId": "system-lumen-frontier",
+      "technologies": [
+        {
+          "id": "tech-react",
+          "name": "React"
+        },
+        {
+          "id": "tech-threejs",
+          "name": "Three.js"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/frontend/src/features/lumenverse/planetary-scene/PlanetaryScene.tsx"
+        ]
+      }
+    },
+    {
+      "id": "app-backend",
+      "name": "FastAPI Backend",
+      "type": "app",
+      "scope": "internal",
+      "status": "planned",
+      "description": "Scaffolded FastAPI service (SQLAlchemy + asyncpg + JWT) intended for authentication and cross-device sync; currently under development and excluded from the Vercel build.",
+      "parentId": "system-lumen-frontier",
+      "technologies": [
+        {
+          "id": "tech-python",
+          "name": "Python"
+        },
+        {
+          "id": "tech-fastapi",
+          "name": "FastAPI"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/backend/main.py",
+          "apps/backend/app/",
+          "apps/backend/requirements.txt"
+        ]
+      }
+    },
+    {
+      "id": "app-serverless-api",
+      "name": "Vercel Serverless Handler",
+      "type": "app",
+      "scope": "internal",
+      "status": "planned",
+      "description": "Vercel serverless entrypoint that wraps the FastAPI app with Mangum for ASGI compatibility; scaffolded and not yet deployed (listed in .vercelignore).",
+      "parentId": "system-lumen-frontier",
+      "technologies": [
+        {
+          "id": "tech-python",
+          "name": "Python"
+        },
+        {
+          "id": "tech-fastapi",
+          "name": "FastAPI"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "api/index.py",
+          "api/requirements.txt"
+        ]
+      }
+    },
+    {
+      "id": "component-widget-registry",
+      "name": "Widget Registry & Renderer",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Registry-driven widget system that maps each widget type to metadata and code-splits every widget into its own React.lazy chunk rendered through WidgetRenderer.",
+      "parentId": "app-lumenos",
+      "technologies": [
+        {
+          "id": "tech-react",
+          "name": "React"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/frontend/src/features/lumen-os/dashboard/services/widgetRegistry.ts",
+          "apps/frontend/src/features/lumen-os/dashboard/components/widget-system/WidgetRenderer.tsx"
+        ]
+      }
+    },
+    {
+      "id": "component-widgets",
+      "name": "Study Widgets",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "The 13 study widgets — notes, tasks, pomodoro, goals, journal, music, ambience, stats, flashcards, analytics, progress, time tracker, and quick access — each lazy-loaded on demand.",
+      "parentId": "app-lumenos",
+      "technologies": [
+        {
+          "id": "tech-react",
+          "name": "React"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/frontend/src/features/lumen-os/dashboard/widgets/"
+        ]
+      }
+    },
+    {
+      "id": "component-dashboard-store",
+      "name": "Dashboard Store",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Nanostores atoms holding widget layout, edit mode, and background state that act as the cross-island bus and persist/migrate layouts to localStorage.",
+      "parentId": "app-lumenos",
+      "technologies": [
+        {
+          "id": "tech-nanostores",
+          "name": "Nanostores"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/frontend/src/features/lumen-os/dashboard/stores/dashboardStore.ts"
+        ]
+      }
+    },
+    {
+      "id": "component-marketplace",
+      "name": "Widget Marketplace",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Categorized widget marketplace plus custom-background upload modal that let the learner add widgets and personalize the canvas.",
+      "parentId": "app-lumenos",
+      "technologies": [
+        {
+          "id": "tech-react",
+          "name": "React"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/frontend/src/features/lumen-os/dashboard/components/marketplace/WidgetMarketplace.tsx",
+          "apps/frontend/src/features/lumen-os/dashboard/components/layout/BackgroundUploadModal.tsx"
+        ]
+      }
+    },
+    {
+      "id": "component-dnd-hooks",
+      "name": "Drag & Resize Hooks",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Custom useDrag and useResize hooks providing direct-manipulation dragging and corner-resizing with per-widget min/max size constraints.",
+      "parentId": "app-lumenos",
+      "technologies": [
+        {
+          "id": "tech-react",
+          "name": "React"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/frontend/src/features/lumen-os/dashboard/hooks/useDrag.ts",
+          "apps/frontend/src/features/lumen-os/dashboard/hooks/useResize.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-localstorage",
+      "name": "Browser localStorage",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "Browser localStorage that persists the dashboard widget layout, custom background image, and migrated older layouts so the canvas returns exactly as the learner left it.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "apps/frontend/src/features/lumen-os/dashboard/stores/dashboardStore.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-supabase",
+      "name": "Supabase Postgres",
+      "type": "store",
+      "scope": "external",
+      "status": "planned",
+      "description": "Planned Supabase Postgres backing store for user auth and cross-device sync, configured via DATABASE_URL / SUPABASE_URL but not yet wired up.",
+      "technologies": [
+        {
+          "id": "tech-supabase",
+          "name": "Supabase"
+        },
+        {
+          "id": "tech-postgresql",
+          "name": "PostgreSQL"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/backend/.env.example",
+          "apps/backend/app/core/supabase.py"
+        ]
+      }
+    },
+    {
+      "id": "system-youtube",
+      "name": "YouTube",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "YouTube IFrame Player API embedded by the Music widget to stream learner-added tracks and playlists while they study.",
+      "technologies": [
+        {
+          "id": "tech-youtube",
+          "name": "YouTube"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/frontend/src/features/lumen-os/dashboard/widgets/music/MusicWidget.tsx",
+          "apps/frontend/src/features/lumen-os/dashboard/widgets/music/youtubeUtils.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-vercel",
+      "name": "Vercel",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Vercel hosting that serves the Astro static build via @astrojs/vercel with Web Analytics enabled, and would host the serverless API.",
+      "technologies": [
+        {
+          "id": "tech-vercel",
+          "name": "Vercel"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "apps/frontend/astro.config.mjs",
+          "apps/frontend/vercel.json",
+          ".vercelignore"
+        ]
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn-l1-learner-system",
+      "sourceId": "actor-learner",
+      "targetId": "system-lumen-frontier",
+      "label": "explores study material via dashboard or 3D space",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-developer-system",
+      "sourceId": "actor-developer",
+      "targetId": "system-lumen-frontier",
+      "label": "builds and deploys the app",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-system-youtube",
+      "sourceId": "system-lumen-frontier",
+      "targetId": "system-youtube",
+      "label": "streams music via YouTube IFrame API",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-system-localstorage",
+      "sourceId": "system-lumen-frontier",
+      "targetId": "store-localstorage",
+      "label": "persists widget layouts and background",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-system-supabase",
+      "sourceId": "system-lumen-frontier",
+      "targetId": "store-supabase",
+      "label": "planned auth and cross-device sync",
+      "status": "planned",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-system-vercel",
+      "sourceId": "system-lumen-frontier",
+      "targetId": "system-vercel",
+      "label": "deployed as a static site (+ planned serverless API)",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-learner-web",
+      "sourceId": "actor-learner",
+      "targetId": "app-web-shell",
+      "label": "opens landing page and picks an experience",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-developer-vercel",
+      "sourceId": "actor-developer",
+      "targetId": "system-vercel",
+      "label": "ships static build via vercel --prod",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-web-lumenos",
+      "sourceId": "app-web-shell",
+      "targetId": "app-lumenos",
+      "label": "mounts dashboard as a client:only React island",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-web-lumenverse",
+      "sourceId": "app-web-shell",
+      "targetId": "app-lumenverse",
+      "label": "mounts 3D scene as a client:load React island",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-lumenos-widget-registry",
+      "sourceId": "app-lumenos",
+      "targetId": "component-widget-registry",
+      "label": "renders each widget through the registry",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-widget-registry-widgets",
+      "sourceId": "component-widget-registry",
+      "targetId": "component-widgets",
+      "label": "lazy-loads the widget chunk by type (React.lazy)",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-lumenos-dnd",
+      "sourceId": "app-lumenos",
+      "targetId": "component-dnd-hooks",
+      "label": "drags and resizes widgets on the canvas",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-lumenos-store",
+      "sourceId": "app-lumenos",
+      "targetId": "component-dashboard-store",
+      "label": "reads/writes layout via nanostores reactive atoms",
+      "status": "live",
+      "type": "event"
+    },
+    {
+      "id": "conn-lumenos-marketplace",
+      "sourceId": "app-lumenos",
+      "targetId": "component-marketplace",
+      "label": "adds widgets and uploads a custom background",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-store-localstorage",
+      "sourceId": "component-dashboard-store",
+      "targetId": "store-localstorage",
+      "label": "persists and migrates saved layouts",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-widgets-youtube",
+      "sourceId": "component-widgets",
+      "targetId": "system-youtube",
+      "label": "Music widget plays tracks via the YouTube IFrame API",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-web-serverless",
+      "sourceId": "app-web-shell",
+      "targetId": "app-serverless-api",
+      "label": "planned auth/sync API calls (PUBLIC_API_URL)",
+      "status": "planned",
+      "type": "sync"
+    },
+    {
+      "id": "conn-serverless-backend",
+      "sourceId": "app-serverless-api",
+      "targetId": "app-backend",
+      "label": "wraps FastAPI via Mangum (ASGI)",
+      "status": "planned",
+      "type": "sync"
+    },
+    {
+      "id": "conn-backend-supabase",
+      "sourceId": "app-backend",
+      "targetId": "store-supabase",
+      "label": "planned user data + auth via SQLAlchemy/asyncpg",
+      "status": "planned",
+      "type": "sync"
+    },
+    {
+      "id": "conn-web-vercel",
+      "sourceId": "app-web-shell",
+      "targetId": "system-vercel",
+      "label": "deployed as Astro static output",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-serverless-vercel",
+      "sourceId": "app-serverless-api",
+      "targetId": "system-vercel",
+      "label": "planned deployment as a Vercel serverless function",
+      "status": "planned",
+      "type": "async"
+    }
+  ],
+  "groups": [
+    {
+      "id": "group-experience",
+      "name": "Experience Shell",
+      "objectIds": [
+        "app-web-shell",
+        "app-lumenos",
+        "app-lumenverse"
+      ]
+    },
+    {
+      "id": "group-widget-platform",
+      "name": "Widget Platform",
+      "objectIds": [
+        "component-widget-registry",
+        "component-widgets",
+        "component-dnd-hooks",
+        "component-dashboard-store",
+        "component-marketplace"
+      ]
+    },
+    {
+      "id": "group-backend",
+      "name": "Backend (Scaffolded)",
+      "objectIds": [
+        "app-backend",
+        "app-serverless-api"
+      ]
+    },
+    {
+      "id": "group-data",
+      "name": "Data & Persistence",
+      "objectIds": [
+        "store-localstorage",
+        "store-supabase"
+      ]
+    },
+    {
+      "id": "group-external",
+      "name": "External Services & Infra",
+      "objectIds": [
+        "system-youtube",
+        "system-vercel"
+      ]
+    }
+  ],
+  "technologies": [
+    {
+      "id": "tech-typescript",
+      "name": "TypeScript",
+      "color": "#3178c6",
+      "category": "language"
+    },
+    {
+      "id": "tech-python",
+      "name": "Python",
+      "color": "#3776ab",
+      "category": "language"
+    },
+    {
+      "id": "tech-astro",
+      "name": "Astro",
+      "color": "#ff5d01",
+      "category": "framework"
+    },
+    {
+      "id": "tech-react",
+      "name": "React",
+      "color": "#61dafb",
+      "category": "framework"
+    },
+    {
+      "id": "tech-threejs",
+      "name": "Three.js",
+      "color": "#000000",
+      "category": "framework"
+    },
+    {
+      "id": "tech-tailwind",
+      "name": "Tailwind CSS",
+      "color": "#38bdf8",
+      "category": "framework"
+    },
+    {
+      "id": "tech-nanostores",
+      "name": "Nanostores",
+      "color": "#f7b500",
+      "category": "framework"
+    },
+    {
+      "id": "tech-fastapi",
+      "name": "FastAPI",
+      "color": "#009688",
+      "category": "framework"
+    },
+    {
+      "id": "tech-vite",
+      "name": "Vite",
+      "color": "#646cff",
+      "category": "tool"
+    },
+    {
+      "id": "tech-supabase",
+      "name": "Supabase",
+      "color": "#3ecf8e",
+      "category": "service"
+    },
+    {
+      "id": "tech-postgresql",
+      "name": "PostgreSQL",
+      "color": "#336791",
+      "category": "database"
+    },
+    {
+      "id": "tech-vercel",
+      "name": "Vercel",
+      "color": "#000000",
+      "category": "service"
+    },
+    {
+      "id": "tech-youtube",
+      "name": "YouTube",
+      "color": "#ff0000",
+      "category": "service"
+    }
+  ],
+  "tags": [],
+  "diagrams": [
+    {
+      "id": "diagram-context",
+      "name": "System Context",
+      "level": 1,
+      "objectIds": [
+        "actor-learner",
+        "actor-developer",
+        "system-lumen-frontier",
+        "store-localstorage",
+        "store-supabase",
+        "system-youtube",
+        "system-vercel"
+      ],
+      "connectionIds": [
+        "conn-l1-learner-system",
+        "conn-l1-developer-system",
+        "conn-l1-system-youtube",
+        "conn-l1-system-localstorage",
+        "conn-l1-system-supabase",
+        "conn-l1-system-vercel"
+      ],
+      "positions": {}
+    },
+    {
+      "id": "diagram-container",
+      "name": "Container",
+      "level": 2,
+      "objectIds": [
+        "actor-learner",
+        "actor-developer",
+        "app-web-shell",
+        "app-lumenos",
+        "app-lumenverse",
+        "app-backend",
+        "app-serverless-api",
+        "component-widget-registry",
+        "component-widgets",
+        "component-dashboard-store",
+        "component-marketplace",
+        "component-dnd-hooks",
+        "store-localstorage",
+        "store-supabase",
+        "system-youtube",
+        "system-vercel"
+      ],
+      "connectionIds": [
+        "conn-learner-web",
+        "conn-developer-vercel",
+        "conn-web-lumenos",
+        "conn-web-lumenverse",
+        "conn-lumenos-widget-registry",
+        "conn-widget-registry-widgets",
+        "conn-lumenos-dnd",
+        "conn-lumenos-store",
+        "conn-lumenos-marketplace",
+        "conn-store-localstorage",
+        "conn-widgets-youtube",
+        "conn-web-serverless",
+        "conn-serverless-backend",
+        "conn-backend-supabase",
+        "conn-web-vercel",
+        "conn-serverless-vercel"
+      ],
+      "positions": {}
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow-arrange-dashboard",
+      "name": "Arrange the LumenOS Dashboard",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-learner-web",
+          "description": "Learner opens the /dashboard route from the landing page"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-web-lumenos",
+          "description": "Astro mounts the dashboard as a client:only React island"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-lumenos-widget-registry",
+          "description": "Dashboard renders its widgets through the registry"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-widget-registry-widgets",
+          "description": "Each widget type is code-split and lazy-loaded on demand"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-lumenos-dnd",
+          "description": "Learner drags and resizes a widget via useDrag/useResize"
+        },
+        {
+          "order": 6,
+          "connectionId": "conn-lumenos-store",
+          "description": "The new layout is written to the nanostores atoms"
+        },
+        {
+          "order": 7,
+          "connectionId": "conn-store-localstorage",
+          "description": "Store persists the layout to localStorage so it returns on reload"
+        }
+      ]
+    },
+    {
+      "id": "flow-play-music",
+      "name": "Play Focus Music",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-learner-web",
+          "description": "Learner enters LumenOS"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-lumenos-marketplace",
+          "description": "Learner adds the Music widget from the categorized marketplace"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-widget-registry-widgets",
+          "description": "The Music widget chunk is lazy-loaded"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-widgets-youtube",
+          "description": "Widget extracts the video ID and streams audio via the YouTube IFrame Player API"
+        }
+      ]
+    },
+    {
+      "id": "flow-explore-lumenverse",
+      "name": "Explore the Lumenverse",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-learner-web",
+          "description": "Learner selects Lumenverse on the landing page"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-web-lumenverse",
+          "description": "Astro hydrates the 985-line Three.js scene as a client:load island"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-web-vercel",
+          "description": "The split three.js vendor chunk is delivered from Vercel static hosting"
+        }
+      ]
+    },
+    {
+      "id": "flow-planned-sync",
+      "name": "Planned Cross-Device Sync",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-web-serverless",
+          "description": "Frontend calls the backend API at PUBLIC_API_URL (planned)"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-serverless-backend",
+          "description": "Vercel serverless handler forwards the request to FastAPI via Mangum (planned)"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-backend-supabase",
+          "description": "FastAPI reads/writes user data and auth in Supabase Postgres (planned)"
+        }
+      ]
+    }
+  ]
+}

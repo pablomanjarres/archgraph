@@ -1,0 +1,1094 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "projectName": "forge",
+    "generatedAt": "2026-07-03T00:00:00.000Z",
+    "generatedBy": "claude-code",
+    "codebaseRoot": "/Users/pablo/Projects/forge"
+  },
+  "objects": [
+    {
+      "id": "actor-operator",
+      "name": "Operator (Pablo)",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Single operator who drives the Forge desktop dashboard to generate media, run Remotion templates, manage repos, and launch agent tasks.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "actor-claude-code",
+      "name": "Claude Code",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "AI coding agent that connects over stdio MCP and calls forge_* tools to generate media, list repos/templates, and log activity.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "actor-lan-device",
+      "name": "Tailscale / LAN Device",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Phone or other device on Tailscale/LAN that reaches the Forge UI and Remotion Studio via the 0.0.0.0 bind and IP allowlist.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "system-forge",
+      "name": "Forge",
+      "type": "system",
+      "scope": "internal",
+      "status": "live",
+      "description": "macOS desktop AI orchestration center for media generation, agent management, and Remotion demo-video creation.",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-electron",
+          "name": "Electron"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "package.json",
+          "electron-entry.cjs",
+          "AGENTS.md"
+        ]
+      }
+    },
+    {
+      "id": "app-electron-shell",
+      "name": "Electron Shell",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Electron main process that owns the window and tray, holds a single-instance lock, spawns the Express server child process, and bridges the macOS Keychain via safeStorage.",
+      "parentId": "system-forge",
+      "technologies": [
+        {
+          "id": "tech-electron",
+          "name": "Electron"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "electron/main.ts",
+          "electron/preload.ts",
+          "electron/keychain.ts"
+        ]
+      }
+    },
+    {
+      "id": "app-dashboard",
+      "name": "Web Dashboard",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "React 19 SPA (Videos, Images, Audio, Gallery, Templates, Editor, Repos, Agents, Providers, Workspace, Settings) served by Vite in dev and by Express in the packaged app.",
+      "parentId": "system-forge",
+      "technologies": [
+        {
+          "id": "tech-react",
+          "name": "React"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-vite",
+          "name": "Vite"
+        },
+        {
+          "id": "tech-tailwind",
+          "name": "Tailwind CSS"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/App.tsx",
+          "src/features/",
+          "src/lib/api.ts"
+        ]
+      }
+    },
+    {
+      "id": "app-api",
+      "name": "Forge API Server",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Express 5 HTTP + WebSocket backend on port 3400 with routes for providers, tasks, media, repos, templates, remotion, workspace, activity, and generation.",
+      "parentId": "system-forge",
+      "technologies": [
+        {
+          "id": "tech-express",
+          "name": "Express"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "server/index.ts",
+          "server/storage.ts",
+          "server/providers/"
+        ]
+      }
+    },
+    {
+      "id": "app-mcp-server",
+      "name": "MCP Server",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Standalone stdio JSON-RPC server exposing forge_generate_image/video/audio, list media/repos/templates, and create/run template tools to Claude Code.",
+      "parentId": "system-forge",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-mcp",
+          "name": "MCP"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "server/mcp-server.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-ws-hub",
+      "name": "WebSocket Hub",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "In-process WebSocket server on /ws that broadcasts task, media, render, and agent-output events and supports per-task subscriptions.",
+      "parentId": "app-api",
+      "technologies": [
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "server/ws.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-remotion-manager",
+      "name": "Remotion Manager",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Scans repo compositions, spawns `remotion studio` and `remotion render` subprocesses, and promotes rendered mp4s into the versioned media layout.",
+      "parentId": "app-api",
+      "technologies": [
+        {
+          "id": "tech-remotion",
+          "name": "Remotion"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "server/remotion-process.ts",
+          "server/remotion-templates.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-gemini-composer",
+      "name": "Gemini Composer",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "AI template generator that loads relevant SKILL.md context and asks Gemini for structured JSON containing self-contained Remotion component code.",
+      "parentId": "app-api",
+      "technologies": [
+        {
+          "id": "tech-gemini",
+          "name": "Google Gemini"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "server/gemini-compose.ts",
+          "server/skills.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-json-store",
+      "name": "JSON Data Store",
+      "type": "store",
+      "scope": "internal",
+      "status": "live",
+      "description": "Atomic JSON files (config, templates, media, tasks, repos, activity) plus a generated/ media output dir; relocates to iCloud Drive in production.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "data/config.json",
+          "data/tasks.json",
+          "data/media.json",
+          "server/storage.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-keychain",
+      "name": "macOS Keychain",
+      "type": "store",
+      "scope": "internal",
+      "status": "live",
+      "description": "Encrypted provider API-key store written via Electron safeStorage (forge-keys.enc); keys never live in config.json and resolve at call time.",
+      "technologies": [
+        {
+          "id": "tech-electron",
+          "name": "Electron"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "electron/keychain.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-media-fs",
+      "name": "Media Root (Filesystem)",
+      "type": "store",
+      "scope": "internal",
+      "status": "live",
+      "description": "Shared ~/Projects/media root holding weekly project workspaces (sources/exports) and versioned rendered videos under videos/rendered.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "server/media-workspace.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-skills-library",
+      "name": "Skill Library",
+      "type": "store",
+      "scope": "internal",
+      "status": "live",
+      "description": "Read-only SKILL.md library scanned from ~/.claude/skills and Projects skill roots, exposed for listing and injected into composer prompts.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "server/skills.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-gemini",
+      "name": "Google Gemini",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Google GenAI API used for image (Imagen), video (Veo), speech (TTS), and text/chat, with multi-key routing per purpose.",
+      "technologies": [
+        {
+          "id": "tech-gemini",
+          "name": "Google Gemini"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "server/providers/gemini.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-elevenlabs",
+      "name": "ElevenLabs",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Voice API for multilingual text-to-speech and sound-effect generation, returning mp3 files into the generated media dir.",
+      "technologies": [
+        {
+          "id": "tech-elevenlabs",
+          "name": "ElevenLabs"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "server/providers/elevenlabs.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-runpod",
+      "name": "RunPod",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Serverless GPU endpoints for Qwen-Edit image editing, RealESRGAN upscaling, and Qwen3-TTS via runsync/status polling.",
+      "technologies": [
+        {
+          "id": "tech-runpod",
+          "name": "RunPod"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "server/providers/runpod.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-codex",
+      "name": "Codex CLI",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "OpenAI Codex CLI spawned as a `codex exec --json` subprocess for fire-and-forget agent tasks with streamed stdout.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "server/providers/codex.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-remotion",
+      "name": "Remotion Project",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "External Remotion demo project (remotion-demos) that Forge discovers via FORGE_REMOTION_DIR and drives with studio/render CLI subprocesses.",
+      "technologies": [
+        {
+          "id": "tech-remotion",
+          "name": "Remotion"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "server/remotion-process.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-git",
+      "name": "Git Repositories",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Remote Git repos cloned and pulled into local working copies for the Repos feature via git clone/pull and simple-git.",
+      "technologies": [],
+      "metadata": {
+        "files": [
+          "server/index.ts",
+          "data/repos.json"
+        ]
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn-operator-dashboard",
+      "sourceId": "actor-operator",
+      "targetId": "app-dashboard",
+      "label": "uses the desktop dashboard UI",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-shell-dashboard",
+      "sourceId": "app-electron-shell",
+      "targetId": "app-dashboard",
+      "label": "hosts the SPA in a BrowserWindow + exposes keychain IPC bridge",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-shell-api",
+      "sourceId": "app-electron-shell",
+      "targetId": "app-api",
+      "label": "spawns the Express server child process (ELECTRON_RUN_AS_NODE)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-shell-keychain",
+      "sourceId": "app-electron-shell",
+      "targetId": "store-keychain",
+      "label": "encrypts/reads provider keys via safeStorage",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-dashboard-api",
+      "sourceId": "app-dashboard",
+      "targetId": "app-api",
+      "label": "REST calls to :3400 /api/*",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-dashboard-wshub",
+      "sourceId": "app-dashboard",
+      "targetId": "comp-ws-hub",
+      "label": "subscribes to task/media events over /ws",
+      "status": "live",
+      "type": "event"
+    },
+    {
+      "id": "conn-claudecode-mcp",
+      "sourceId": "actor-claude-code",
+      "targetId": "app-mcp-server",
+      "label": "calls forge_* tools via stdio JSON-RPC",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-mcp-api",
+      "sourceId": "app-mcp-server",
+      "targetId": "app-api",
+      "label": "proxies tool calls to REST API (FORGE_URL)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-lan-api",
+      "sourceId": "actor-lan-device",
+      "targetId": "app-api",
+      "label": "reaches UI/API over Tailscale/LAN (IP allowlist)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-json",
+      "sourceId": "app-api",
+      "targetId": "store-json-store",
+      "label": "persists config/tasks/media/repos/templates/activity",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-wshub",
+      "sourceId": "app-api",
+      "targetId": "comp-ws-hub",
+      "label": "broadcasts task/media/render updates",
+      "status": "live",
+      "type": "event"
+    },
+    {
+      "id": "conn-api-remotionmgr",
+      "sourceId": "app-api",
+      "targetId": "comp-remotion-manager",
+      "label": "starts studio / renders repo templates",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-composer",
+      "sourceId": "app-api",
+      "targetId": "comp-gemini-composer",
+      "label": "AI-generates a Remotion component from a prompt",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-mediafs",
+      "sourceId": "app-api",
+      "targetId": "store-media-fs",
+      "label": "browses projects, sources, exports, rendered videos",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-keychain",
+      "sourceId": "app-api",
+      "targetId": "store-keychain",
+      "label": "resolves provider API keys at call time",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-skills",
+      "sourceId": "app-api",
+      "targetId": "store-skills-library",
+      "label": "lists available skills for the UI",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-gemini",
+      "sourceId": "app-api",
+      "targetId": "system-gemini",
+      "label": "generate image / video / audio / chat",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-api-elevenlabs",
+      "sourceId": "app-api",
+      "targetId": "system-elevenlabs",
+      "label": "text-to-speech + sound effects",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-api-runpod",
+      "sourceId": "app-api",
+      "targetId": "system-runpod",
+      "label": "Qwen-Edit, RealESRGAN, Qwen3-TTS on serverless GPU",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-api-codex",
+      "sourceId": "app-api",
+      "targetId": "system-codex",
+      "label": "launches Codex CLI agent tasks (codex exec --json)",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-api-git",
+      "sourceId": "app-api",
+      "targetId": "system-git",
+      "label": "clone/pull managed repositories",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-remotionmgr-remotion",
+      "sourceId": "comp-remotion-manager",
+      "targetId": "system-remotion",
+      "label": "spawns `remotion studio` / `remotion render` subprocess",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-remotionmgr-mediafs",
+      "sourceId": "comp-remotion-manager",
+      "targetId": "store-media-fs",
+      "label": "writes versioned mp4 and promotes current.mp4",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-composer-gemini",
+      "sourceId": "comp-gemini-composer",
+      "targetId": "system-gemini",
+      "label": "structured JSON codegen of component code",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-composer-skills",
+      "sourceId": "comp-gemini-composer",
+      "targetId": "store-skills-library",
+      "label": "loads SKILL.md context for the prompt",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-operator-forge",
+      "sourceId": "actor-operator",
+      "targetId": "system-forge",
+      "label": "generates media, runs templates, launches agents",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-claudecode-forge",
+      "sourceId": "actor-claude-code",
+      "targetId": "system-forge",
+      "label": "calls forge tools via MCP",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-lan-forge",
+      "sourceId": "actor-lan-device",
+      "targetId": "system-forge",
+      "label": "reaches the UI over Tailscale/LAN",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-forge-gemini",
+      "sourceId": "system-forge",
+      "targetId": "system-gemini",
+      "label": "image/video/audio/chat generation",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-forge-elevenlabs",
+      "sourceId": "system-forge",
+      "targetId": "system-elevenlabs",
+      "label": "voice + sound effects",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-forge-runpod",
+      "sourceId": "system-forge",
+      "targetId": "system-runpod",
+      "label": "GPU image edit / upscale / TTS",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-forge-codex",
+      "sourceId": "system-forge",
+      "targetId": "system-codex",
+      "label": "agent task execution",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-forge-remotion",
+      "sourceId": "system-forge",
+      "targetId": "system-remotion",
+      "label": "renders demo videos",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-forge-git",
+      "sourceId": "system-forge",
+      "targetId": "system-git",
+      "label": "manages repositories",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-forge-keychain",
+      "sourceId": "system-forge",
+      "targetId": "store-keychain",
+      "label": "stores API keys encrypted",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-forge-mediafs",
+      "sourceId": "system-forge",
+      "targetId": "store-media-fs",
+      "label": "reads/writes the shared media root",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-forge-json",
+      "sourceId": "system-forge",
+      "targetId": "store-json-store",
+      "label": "persists local state (iCloud in prod)",
+      "status": "live",
+      "type": "sync"
+    }
+  ],
+  "groups": [
+    {
+      "id": "group-desktop",
+      "name": "Desktop Shell",
+      "objectIds": [
+        "app-electron-shell"
+      ]
+    },
+    {
+      "id": "group-frontend",
+      "name": "Client",
+      "objectIds": [
+        "app-dashboard"
+      ]
+    },
+    {
+      "id": "group-backend",
+      "name": "Backend Services",
+      "objectIds": [
+        "app-api",
+        "app-mcp-server",
+        "comp-ws-hub",
+        "comp-remotion-manager",
+        "comp-gemini-composer"
+      ]
+    },
+    {
+      "id": "group-stores",
+      "name": "Local Stores",
+      "objectIds": [
+        "store-json-store",
+        "store-keychain",
+        "store-media-fs",
+        "store-skills-library"
+      ]
+    },
+    {
+      "id": "group-external",
+      "name": "External AI & Media Services",
+      "objectIds": [
+        "system-gemini",
+        "system-elevenlabs",
+        "system-runpod",
+        "system-codex",
+        "system-remotion",
+        "system-git"
+      ]
+    }
+  ],
+  "technologies": [
+    {
+      "id": "tech-typescript",
+      "name": "TypeScript",
+      "color": "#3178c6",
+      "category": "language"
+    },
+    {
+      "id": "tech-nodejs",
+      "name": "Node.js",
+      "color": "#339933",
+      "category": "tool"
+    },
+    {
+      "id": "tech-react",
+      "name": "React",
+      "color": "#61dafb",
+      "category": "framework"
+    },
+    {
+      "id": "tech-electron",
+      "name": "Electron",
+      "color": "#47848f",
+      "category": "framework"
+    },
+    {
+      "id": "tech-express",
+      "name": "Express",
+      "color": "#000000",
+      "category": "framework"
+    },
+    {
+      "id": "tech-vite",
+      "name": "Vite",
+      "color": "#646cff",
+      "category": "tool"
+    },
+    {
+      "id": "tech-tailwind",
+      "name": "Tailwind CSS",
+      "color": "#38bdf8",
+      "category": "framework"
+    },
+    {
+      "id": "tech-remotion",
+      "name": "Remotion",
+      "color": "#0b84f3",
+      "category": "framework"
+    },
+    {
+      "id": "tech-gemini",
+      "name": "Google Gemini",
+      "color": "#4285f4",
+      "category": "service"
+    },
+    {
+      "id": "tech-runpod",
+      "name": "RunPod",
+      "color": "#6c3fc9",
+      "category": "service"
+    },
+    {
+      "id": "tech-elevenlabs",
+      "name": "ElevenLabs",
+      "color": "#111111",
+      "category": "service"
+    },
+    {
+      "id": "tech-mcp",
+      "name": "MCP",
+      "color": "#6366f1",
+      "category": "tool"
+    }
+  ],
+  "tags": [],
+  "diagrams": [
+    {
+      "id": "diagram-context",
+      "name": "System Context",
+      "level": 1,
+      "objectIds": [
+        "actor-operator",
+        "actor-claude-code",
+        "actor-lan-device",
+        "system-forge",
+        "system-gemini",
+        "system-elevenlabs",
+        "system-runpod",
+        "system-codex",
+        "system-remotion",
+        "system-git",
+        "store-keychain",
+        "store-media-fs",
+        "store-json-store"
+      ],
+      "connectionIds": [
+        "conn-l1-operator-forge",
+        "conn-l1-claudecode-forge",
+        "conn-l1-lan-forge",
+        "conn-l1-forge-gemini",
+        "conn-l1-forge-elevenlabs",
+        "conn-l1-forge-runpod",
+        "conn-l1-forge-codex",
+        "conn-l1-forge-remotion",
+        "conn-l1-forge-git",
+        "conn-l1-forge-keychain",
+        "conn-l1-forge-mediafs",
+        "conn-l1-forge-json"
+      ],
+      "positions": {}
+    },
+    {
+      "id": "diagram-container",
+      "name": "Container",
+      "level": 2,
+      "objectIds": [
+        "actor-operator",
+        "actor-claude-code",
+        "actor-lan-device",
+        "app-electron-shell",
+        "app-dashboard",
+        "app-api",
+        "app-mcp-server",
+        "comp-ws-hub",
+        "comp-remotion-manager",
+        "comp-gemini-composer",
+        "store-json-store",
+        "store-keychain",
+        "store-media-fs",
+        "store-skills-library",
+        "system-gemini",
+        "system-elevenlabs",
+        "system-runpod",
+        "system-codex",
+        "system-remotion",
+        "system-git"
+      ],
+      "connectionIds": [
+        "conn-operator-dashboard",
+        "conn-shell-dashboard",
+        "conn-shell-api",
+        "conn-shell-keychain",
+        "conn-dashboard-api",
+        "conn-dashboard-wshub",
+        "conn-claudecode-mcp",
+        "conn-mcp-api",
+        "conn-lan-api",
+        "conn-api-json",
+        "conn-api-wshub",
+        "conn-api-remotionmgr",
+        "conn-api-composer",
+        "conn-api-mediafs",
+        "conn-api-keychain",
+        "conn-api-skills",
+        "conn-api-gemini",
+        "conn-api-elevenlabs",
+        "conn-api-runpod",
+        "conn-api-codex",
+        "conn-api-git",
+        "conn-remotionmgr-remotion",
+        "conn-remotionmgr-mediafs",
+        "conn-composer-gemini",
+        "conn-composer-skills"
+      ],
+      "positions": {}
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow-mcp-media-generation",
+      "name": "AI Media Generation via MCP",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-claudecode-mcp",
+          "description": "Claude Code calls forge_generate_image with a prompt"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-mcp-api",
+          "description": "MCP server proxies to POST /api/generate/image"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-api-keychain",
+          "description": "API resolves the purpose-routed Gemini key from the keychain"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-api-gemini",
+          "description": "API calls Gemini (Imagen) and writes the image to the generated dir"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-api-json",
+          "description": "API upserts the media record into media.json"
+        },
+        {
+          "order": 6,
+          "connectionId": "conn-api-wshub",
+          "description": "API broadcasts a media_created event to subscribers"
+        }
+      ]
+    },
+    {
+      "id": "flow-render-remotion",
+      "name": "Render a Remotion Demo Video",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-operator-dashboard",
+          "description": "Operator clicks Render on a repo template"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-dashboard-api",
+          "description": "Dashboard POSTs /api/templates/:id/render-repo"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-api-remotionmgr",
+          "description": "API invokes the Remotion manager for the chosen composition"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-remotionmgr-remotion",
+          "description": "Manager spawns `npx remotion render` in the Remotion project"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-remotionmgr-mediafs",
+          "description": "Rendered mp4 is versioned and promoted to current.mp4 in the media root"
+        },
+        {
+          "order": 6,
+          "connectionId": "conn-api-wshub",
+          "description": "API streams render progress and template_updated over WS"
+        }
+      ]
+    },
+    {
+      "id": "flow-ai-compose-template",
+      "name": "AI-Compose a New Remotion Template",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-operator-dashboard",
+          "description": "Operator submits a prompt in Templates AI Create"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-dashboard-api",
+          "description": "Dashboard POSTs /api/templates/ai-create"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-api-composer",
+          "description": "API hands the prompt to the Gemini composer"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-composer-skills",
+          "description": "Composer loads relevant SKILL.md context"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-composer-gemini",
+          "description": "Composer requests structured component code from Gemini"
+        },
+        {
+          "order": 6,
+          "connectionId": "conn-api-json",
+          "description": "API registers the generated template in templates.json"
+        }
+      ]
+    },
+    {
+      "id": "flow-codex-agent-task",
+      "name": "Launch a Codex Agent Task",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-operator-dashboard",
+          "description": "Operator launches an agent task from the Agents page"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-dashboard-api",
+          "description": "Dashboard POSTs /api/tasks/launch with provider=codex"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-api-codex",
+          "description": "API spawns the Codex CLI (codex exec --json)"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-api-wshub",
+          "description": "API streams agent stdout over WS as it runs"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-api-json",
+          "description": "API persists task output and final status to tasks.json"
+        }
+      ]
+    }
+  ]
+}

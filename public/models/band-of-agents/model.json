@@ -1,0 +1,1040 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "projectName": "band-of-agents",
+    "generatedAt": "2026-07-03T00:00:00.000Z",
+    "generatedBy": "claude-code",
+    "codebaseRoot": "/Users/pablo/Projects/Band-Of-Agents"
+  },
+  "objects": [
+    {
+      "id": "actor-marketer",
+      "name": "Marketing Operator",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Campaign owner who submits marketing content (copy, images, video) and runs multi-agent reviews from the web portal.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "actor-compliance-lead",
+      "name": "Compliance Lead",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Human marketing/compliance lead who adjudicates escalated deadlocks and approves or spikes fixes at the permission gate.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "actor-judge",
+      "name": "Live Board Viewer",
+      "type": "actor",
+      "scope": "external",
+      "status": "live",
+      "description": "Hackathon judge or observer who watches the live Band room replay and posts comments relayed into the room.",
+      "technologies": [],
+      "metadata": {}
+    },
+    {
+      "id": "system-review-board",
+      "name": "Band of Agents",
+      "type": "system",
+      "scope": "internal",
+      "status": "live",
+      "description": "A multi-agent marketing content review board where specialist reviewer agents with competing objectives negotiate a verdict inside a Band room and escalate deadlocks to a human.",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "README.md",
+          ".private/context/ARCHITECTURE.md"
+        ]
+      }
+    },
+    {
+      "id": "app-web",
+      "name": "Review Portal (SPA)",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "React + Vite single-page app: the campaign portal, live board console, escalation decisions, and rulebook editor, served on Vercel.",
+      "parentId": "system-review-board",
+      "technologies": [
+        {
+          "id": "tech-react",
+          "name": "React"
+        },
+        {
+          "id": "tech-vite",
+          "name": "Vite"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-tailwind",
+          "name": "Tailwind CSS"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "web/src/App.tsx",
+          "web/src/main.tsx",
+          "web/src/pages/LiveBoardPage.tsx",
+          "web/package.json"
+        ]
+      }
+    },
+    {
+      "id": "app-server",
+      "name": "Orchestration Server",
+      "type": "app",
+      "scope": "internal",
+      "status": "live",
+      "description": "Hono HTTP service that exposes the review/campaign REST API, drives board sessions, relays room messages, and serves the built SPA on Cloud Run.",
+      "parentId": "system-review-board",
+      "technologies": [
+        {
+          "id": "tech-hono",
+          "name": "Hono"
+        },
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-zod",
+          "name": "Zod"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/server/index.ts",
+          "src/server/relay.ts",
+          "Dockerfile"
+        ]
+      }
+    },
+    {
+      "id": "comp-board",
+      "name": "Orchestration Engine",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Runs the two coexisting topologies: the classic coordinator/reconcile board and the blackboard-pods decision spine that drives each asset to a terminal verdict.",
+      "parentId": "app-server",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/board/session.ts",
+          "src/board/pod-board.ts",
+          "src/board/pod-hub.ts",
+          "src/board/campaign.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-agents",
+      "name": "Reviewer Agent Cast",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "The specialist agents with competing mandates (region reviewers, brand, claim/legal, reconcile, mediator, risk adjudicator, remediation) that debate findings in the room.",
+      "parentId": "app-server",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/agents/coordinator.ts",
+          "src/agents/reconcile.ts",
+          "src/agents/pod-lead.ts",
+          "src/agents/risk-adjudicator.ts",
+          "src/agents/remediation.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-band-adapter",
+      "name": "Band Transport Adapter",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Wraps the @band-ai/sdk (plus a fake in-process transport and a cross-framework OpenAI-adapter reviewer) and rehydrates shared brand-DNA context via the room /context endpoint.",
+      "parentId": "app-server",
+      "technologies": [
+        {
+          "id": "tech-band-sdk",
+          "name": "Band SDK"
+        },
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/band/real.ts",
+          "src/band/fake.ts",
+          "src/band/shared-context.ts",
+          "src/band/cross-framework.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-model-router",
+      "name": "Model Router",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "Maps each agent role to a provider (AIML, Bedrock, Vertex Gemini, or Featherless) with timeout-fallback to Vertex and per-call spend metering.",
+      "parentId": "app-server",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        },
+        {
+          "id": "tech-openai",
+          "name": "OpenAI SDK"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/models/route.ts",
+          "src/models/aiml.ts",
+          "src/models/bedrock.ts",
+          "src/models/gemini.ts",
+          "src/models/featherless.ts",
+          "src/models/spend.ts"
+        ]
+      }
+    },
+    {
+      "id": "comp-perception",
+      "name": "Perception Pre-pass",
+      "type": "component",
+      "scope": "internal",
+      "status": "live",
+      "description": "A multimodal pre-pass that captions each image and transcribes audio/video once, so every reviewer reasons over the same text, OCR, and claims.",
+      "parentId": "app-server",
+      "technologies": [
+        {
+          "id": "tech-typescript",
+          "name": "TypeScript"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/perception/perceive.ts",
+          "src/perception/transcribe.ts",
+          "src/perception/synthesize.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-filestore",
+      "name": "File-backed Store",
+      "type": "store",
+      "scope": "internal",
+      "status": "live",
+      "description": "Dependency-free JSON-on-disk store for reviews, event streams, the precedent log, the saved-asset library, rulebook overrides, and generated media.",
+      "parentId": "app-server",
+      "technologies": [
+        {
+          "id": "tech-nodejs",
+          "name": "Node.js"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/store/store.ts",
+          "src/store/artifacts.ts"
+        ]
+      }
+    },
+    {
+      "id": "store-gcs",
+      "name": "Google Cloud Storage",
+      "type": "store",
+      "scope": "external",
+      "status": "live",
+      "description": "Durable bucket that mirrors every write and restores the data dir on boot, since the Cloud Run instance disk is ephemeral.",
+      "technologies": [
+        {
+          "id": "tech-gcp",
+          "name": "Google Cloud"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/store/gcs-backup.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-band-ai",
+      "name": "Band.ai",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "The Band coordination platform: task-scoped rooms, participants, @mentions, events, and shared /context that the agents collaborate through.",
+      "technologies": [
+        {
+          "id": "tech-band-sdk",
+          "name": "Band SDK"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/band/real.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-aiml",
+      "name": "AIML API",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "OpenAI-compatible gateway used as the main model path (GPT, Claude, Gemini, Llama, DeepSeek), Nano Banana image generation, and Whisper speech-to-text.",
+      "technologies": [
+        {
+          "id": "tech-openai",
+          "name": "OpenAI SDK"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/models/aiml.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-bedrock",
+      "name": "AWS Bedrock",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Anthropic Claude models via the Bedrock SDK, used for volume in dev mode (US, brand, disclosure, reconcile, mediator, remediation roles).",
+      "technologies": [
+        {
+          "id": "tech-aws",
+          "name": "AWS"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/models/bedrock.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-vertex",
+      "name": "GCP Vertex AI (Gemini)",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Gemini via @google/genai, the single-credential vertex mode plus the universal fallback for completions, vision captioning, STT, and image generation.",
+      "technologies": [
+        {
+          "id": "tech-gcp",
+          "name": "Google Cloud"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/models/gemini.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-featherless",
+      "name": "Featherless",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "OpenAI-compatible open-source model inference (Llama) driving the LATAM and Scout reviewers, targeting the Featherless partner prize.",
+      "technologies": [
+        {
+          "id": "tech-openai",
+          "name": "OpenAI SDK"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "src/models/featherless.ts"
+        ]
+      }
+    },
+    {
+      "id": "system-cloudrun",
+      "name": "GCP Cloud Run",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Serverless container platform hosting the orchestration server as the band-backend service in us-east1.",
+      "technologies": [
+        {
+          "id": "tech-gcp",
+          "name": "Google Cloud"
+        },
+        {
+          "id": "tech-docker",
+          "name": "Docker"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "Dockerfile",
+          "vercel.json"
+        ]
+      }
+    },
+    {
+      "id": "system-vercel",
+      "name": "Vercel",
+      "type": "system",
+      "scope": "external",
+      "status": "live",
+      "description": "Hosts the built SPA and rewrites /api requests to the Cloud Run backend.",
+      "technologies": [
+        {
+          "id": "tech-vercel",
+          "name": "Vercel"
+        }
+      ],
+      "metadata": {
+        "files": [
+          "vercel.json"
+        ]
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn-marketer-web",
+      "sourceId": "actor-marketer",
+      "targetId": "app-web",
+      "label": "submits campaigns and materials, runs reviews, reads verdicts",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-compliance-web",
+      "sourceId": "actor-compliance-lead",
+      "targetId": "app-web",
+      "label": "adjudicates escalations, approves or spikes fixes",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-judge-web",
+      "sourceId": "actor-judge",
+      "targetId": "app-web",
+      "label": "watches the live board and posts comments",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-web-server",
+      "sourceId": "app-web",
+      "targetId": "app-server",
+      "label": "calls the /api REST endpoints (reviews, campaigns, rooms, events)",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-server-board",
+      "sourceId": "app-server",
+      "targetId": "comp-board",
+      "label": "dispatches an asset to the classic or pods engine",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-board-agents",
+      "sourceId": "comp-board",
+      "targetId": "comp-agents",
+      "label": "recruits reviewers and drives the pod deliberation",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-board-perception",
+      "sourceId": "comp-board",
+      "targetId": "comp-perception",
+      "label": "runs the vision and speech pre-pass on each material",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-board-band",
+      "sourceId": "comp-board",
+      "targetId": "comp-band-adapter",
+      "label": "opens the room, adds participants, streams board events",
+      "status": "live",
+      "type": "event"
+    },
+    {
+      "id": "conn-agents-band",
+      "sourceId": "comp-agents",
+      "targetId": "comp-band-adapter",
+      "label": "posts findings and @mentions peers through the room",
+      "status": "live",
+      "type": "event"
+    },
+    {
+      "id": "conn-agents-router",
+      "sourceId": "comp-agents",
+      "targetId": "comp-model-router",
+      "label": "requests a per-role model completion",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-perception-router",
+      "sourceId": "comp-perception",
+      "targetId": "comp-model-router",
+      "label": "requests vision captioning and speech-to-text",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-band-bandai",
+      "sourceId": "comp-band-adapter",
+      "targetId": "system-band-ai",
+      "label": "carries room messages, mentions, and events over the Band SDK",
+      "status": "live",
+      "type": "event"
+    },
+    {
+      "id": "conn-router-aiml",
+      "sourceId": "comp-model-router",
+      "targetId": "system-aiml",
+      "label": "main-path completions, Nano Banana images, Whisper STT",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-router-bedrock",
+      "sourceId": "comp-model-router",
+      "targetId": "system-bedrock",
+      "label": "Claude completions for volume in dev mode",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-router-vertex",
+      "sourceId": "comp-model-router",
+      "targetId": "system-vertex",
+      "label": "Gemini completions, vision, STT, and image fallback",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-router-featherless",
+      "sourceId": "comp-model-router",
+      "targetId": "system-featherless",
+      "label": "open-model reviewer inference (LATAM, Scout)",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-server-filestore",
+      "sourceId": "app-server",
+      "targetId": "store-filestore",
+      "label": "persists reviews, events, precedents, assets, and rulebooks",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-server-band",
+      "sourceId": "app-server",
+      "targetId": "comp-band-adapter",
+      "label": "injects campaigns and relays viewer messages via the intake agent",
+      "status": "live",
+      "type": "event"
+    },
+    {
+      "id": "conn-server-gcs",
+      "sourceId": "app-server",
+      "targetId": "store-gcs",
+      "label": "mirrors every write and restores the data dir on boot",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-web-vercel",
+      "sourceId": "app-web",
+      "targetId": "system-vercel",
+      "label": "built and served as a static SPA that rewrites /api to the backend",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-server-cloudrun",
+      "sourceId": "app-server",
+      "targetId": "system-cloudrun",
+      "label": "runs as the band-backend Cloud Run service",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-marketer-sys",
+      "sourceId": "actor-marketer",
+      "targetId": "system-review-board",
+      "label": "submits marketing content for multi-agent review",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-compliance-sys",
+      "sourceId": "actor-compliance-lead",
+      "targetId": "system-review-board",
+      "label": "adjudicates escalated items and approves fixes",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-judge-sys",
+      "sourceId": "actor-judge",
+      "targetId": "system-review-board",
+      "label": "watches the live review room",
+      "status": "live",
+      "type": "sync"
+    },
+    {
+      "id": "conn-l1-sys-bandai",
+      "sourceId": "system-review-board",
+      "targetId": "system-band-ai",
+      "label": "coordinates the agent cast in a shared room",
+      "status": "live",
+      "type": "event"
+    },
+    {
+      "id": "conn-l1-sys-aiml",
+      "sourceId": "system-review-board",
+      "targetId": "system-aiml",
+      "label": "main-path model calls and Nano Banana image generation",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-sys-bedrock",
+      "sourceId": "system-review-board",
+      "targetId": "system-bedrock",
+      "label": "Claude completions for volume",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-sys-vertex",
+      "sourceId": "system-review-board",
+      "targetId": "system-vertex",
+      "label": "Gemini completions, vision, and speech-to-text",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-sys-featherless",
+      "sourceId": "system-review-board",
+      "targetId": "system-featherless",
+      "label": "open-source model inference",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-sys-gcs",
+      "sourceId": "system-review-board",
+      "targetId": "store-gcs",
+      "label": "durable mirror of reviews and generated media",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-sys-cloudrun",
+      "sourceId": "system-review-board",
+      "targetId": "system-cloudrun",
+      "label": "backend deployed as a Cloud Run service",
+      "status": "live",
+      "type": "async"
+    },
+    {
+      "id": "conn-l1-sys-vercel",
+      "sourceId": "system-review-board",
+      "targetId": "system-vercel",
+      "label": "web portal hosted on Vercel",
+      "status": "live",
+      "type": "async"
+    }
+  ],
+  "groups": [
+    {
+      "id": "group-frontend",
+      "name": "Client Layer",
+      "objectIds": [
+        "app-web"
+      ]
+    },
+    {
+      "id": "group-orchestration",
+      "name": "Orchestration Server",
+      "objectIds": [
+        "app-server",
+        "comp-board",
+        "comp-agents",
+        "comp-band-adapter",
+        "comp-model-router",
+        "comp-perception"
+      ]
+    },
+    {
+      "id": "group-data",
+      "name": "Data Stores",
+      "objectIds": [
+        "store-filestore",
+        "store-gcs"
+      ]
+    },
+    {
+      "id": "group-coordination",
+      "name": "Coordination Platform",
+      "objectIds": [
+        "system-band-ai"
+      ]
+    },
+    {
+      "id": "group-model-providers",
+      "name": "Model Providers",
+      "objectIds": [
+        "system-aiml",
+        "system-bedrock",
+        "system-vertex",
+        "system-featherless"
+      ]
+    },
+    {
+      "id": "group-infra",
+      "name": "Infrastructure",
+      "objectIds": [
+        "system-cloudrun",
+        "system-vercel"
+      ]
+    }
+  ],
+  "technologies": [
+    {
+      "id": "tech-typescript",
+      "name": "TypeScript",
+      "color": "#3178c6",
+      "category": "language"
+    },
+    {
+      "id": "tech-nodejs",
+      "name": "Node.js",
+      "color": "#339933",
+      "category": "tool"
+    },
+    {
+      "id": "tech-hono",
+      "name": "Hono",
+      "color": "#e36002",
+      "category": "framework"
+    },
+    {
+      "id": "tech-react",
+      "name": "React",
+      "color": "#61dafb",
+      "category": "framework"
+    },
+    {
+      "id": "tech-vite",
+      "name": "Vite",
+      "color": "#646cff",
+      "category": "tool"
+    },
+    {
+      "id": "tech-tailwind",
+      "name": "Tailwind CSS",
+      "color": "#06b6d4",
+      "category": "framework"
+    },
+    {
+      "id": "tech-band-sdk",
+      "name": "Band SDK",
+      "color": "#6366f1",
+      "category": "service"
+    },
+    {
+      "id": "tech-zod",
+      "name": "Zod",
+      "color": "#3e67b1",
+      "category": "framework"
+    },
+    {
+      "id": "tech-openai",
+      "name": "OpenAI SDK",
+      "color": "#10a37f",
+      "category": "service"
+    },
+    {
+      "id": "tech-gcp",
+      "name": "Google Cloud",
+      "color": "#4285f4",
+      "category": "service"
+    },
+    {
+      "id": "tech-aws",
+      "name": "AWS",
+      "color": "#ff9900",
+      "category": "service"
+    },
+    {
+      "id": "tech-vercel",
+      "name": "Vercel",
+      "color": "#000000",
+      "category": "service"
+    },
+    {
+      "id": "tech-docker",
+      "name": "Docker",
+      "color": "#2496ed",
+      "category": "tool"
+    }
+  ],
+  "tags": [],
+  "diagrams": [
+    {
+      "id": "diagram-context",
+      "name": "System Context",
+      "level": 1,
+      "objectIds": [
+        "actor-marketer",
+        "actor-compliance-lead",
+        "actor-judge",
+        "system-review-board",
+        "system-band-ai",
+        "system-aiml",
+        "system-bedrock",
+        "system-vertex",
+        "system-featherless",
+        "store-gcs",
+        "system-cloudrun",
+        "system-vercel"
+      ],
+      "connectionIds": [
+        "conn-l1-marketer-sys",
+        "conn-l1-compliance-sys",
+        "conn-l1-judge-sys",
+        "conn-l1-sys-bandai",
+        "conn-l1-sys-aiml",
+        "conn-l1-sys-bedrock",
+        "conn-l1-sys-vertex",
+        "conn-l1-sys-featherless",
+        "conn-l1-sys-gcs",
+        "conn-l1-sys-cloudrun",
+        "conn-l1-sys-vercel"
+      ],
+      "positions": {}
+    },
+    {
+      "id": "diagram-container",
+      "name": "Container",
+      "level": 2,
+      "objectIds": [
+        "actor-marketer",
+        "actor-compliance-lead",
+        "actor-judge",
+        "app-web",
+        "app-server",
+        "comp-board",
+        "comp-agents",
+        "comp-band-adapter",
+        "comp-model-router",
+        "comp-perception",
+        "store-filestore",
+        "store-gcs",
+        "system-band-ai",
+        "system-aiml",
+        "system-bedrock",
+        "system-vertex",
+        "system-featherless",
+        "system-cloudrun",
+        "system-vercel"
+      ],
+      "connectionIds": [
+        "conn-marketer-web",
+        "conn-compliance-web",
+        "conn-judge-web",
+        "conn-web-server",
+        "conn-server-board",
+        "conn-board-agents",
+        "conn-board-perception",
+        "conn-board-band",
+        "conn-agents-band",
+        "conn-agents-router",
+        "conn-perception-router",
+        "conn-band-bandai",
+        "conn-router-aiml",
+        "conn-router-bedrock",
+        "conn-router-vertex",
+        "conn-router-featherless",
+        "conn-server-filestore",
+        "conn-server-band",
+        "conn-server-gcs",
+        "conn-web-vercel",
+        "conn-server-cloudrun"
+      ],
+      "positions": {}
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow-review",
+      "name": "Pods Review Negotiation",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-marketer-web",
+          "description": "Marketer submits a campaign material for review in the portal"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-web-server",
+          "description": "Portal POSTs the asset to the review API"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-server-board",
+          "description": "Server dispatches it to the blackboard-pods engine"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-board-perception",
+          "description": "Board runs the vision and speech pre-pass on the material"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-board-agents",
+          "description": "Board fans the asset out to the three specialist pods"
+        },
+        {
+          "order": 6,
+          "connectionId": "conn-agents-router",
+          "description": "Each reviewer calls its per-role model to reason"
+        },
+        {
+          "order": 7,
+          "connectionId": "conn-agents-band",
+          "description": "Reviewers file findings and debate conflicts in the room"
+        },
+        {
+          "order": 8,
+          "connectionId": "conn-band-bandai",
+          "description": "Findings and one-round rebuttals flow over the Band SDK"
+        },
+        {
+          "order": 9,
+          "connectionId": "conn-server-filestore",
+          "description": "The verdict and full event stream are persisted"
+        }
+      ]
+    },
+    {
+      "id": "flow-escalation",
+      "name": "Human Escalation and Remediation Loop",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-agents-band",
+          "description": "The Risk Adjudicator posts a report and asks the human to approve a fix"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-server-filestore",
+          "description": "The escalation and blocking findings are persisted"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-compliance-web",
+          "description": "The Compliance Lead opens the escalation in the console"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-web-server",
+          "description": "Approves the fix via the decision endpoint"
+        },
+        {
+          "order": 5,
+          "connectionId": "conn-server-board",
+          "description": "Server drives the approved remediation cycle on the board"
+        },
+        {
+          "order": 6,
+          "connectionId": "conn-agents-router",
+          "description": "Remediation rewrites the copy and regenerates a Nano Banana image"
+        },
+        {
+          "order": 7,
+          "connectionId": "conn-router-aiml",
+          "description": "The image regeneration runs on AIML (Vertex fallback)"
+        },
+        {
+          "order": 8,
+          "connectionId": "conn-agents-band",
+          "description": "Remediation posts the new copy and image and recommits for re-review"
+        }
+      ]
+    },
+    {
+      "id": "flow-relay",
+      "name": "Live Band Room Relay",
+      "steps": [
+        {
+          "order": 1,
+          "connectionId": "conn-judge-web",
+          "description": "A viewer opens the live board and posts a question"
+        },
+        {
+          "order": 2,
+          "connectionId": "conn-web-server",
+          "description": "Portal sends the message to the rooms API"
+        },
+        {
+          "order": 3,
+          "connectionId": "conn-server-band",
+          "description": "The intake relay drives the Band adapter to post it"
+        },
+        {
+          "order": 4,
+          "connectionId": "conn-band-bandai",
+          "description": "The message appears in the real Band.ai room for every agent"
+        }
+      ]
+    }
+  ]
+}
