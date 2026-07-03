@@ -1,4 +1,4 @@
-<p align="center"><a href="https://pablo-oss.vercel.app/archgraph"><img src=".github/banner.png" alt="Archgraph" width="100%" /></a></p>
+<p align="center"><a href="https://pablomanjarres.com/oss/archgraph"><img src=".github/banner.png" alt="Archgraph" width="100%" /></a></p>
 
 <h1 align="center">Archgraph</h1>
 
@@ -18,7 +18,7 @@
   <img src="https://img.shields.io/badge/status-alpha-F59E0B" alt="Status: alpha" />
   <img src="https://img.shields.io/badge/version-0.1.0-3B82F6" alt="Version 0.1.0" />
   <a href="https://pablomanjarres.com/portfolio/projects/archgraph"><img src="https://img.shields.io/badge/Portfolio-write--up-8B5CF6" alt="Portfolio write-up" /></a>
-  <a href="https://pablo-oss.vercel.app/archgraph"><img src="https://img.shields.io/badge/Landing-pablo--oss-111111" alt="Landing page" /></a>
+  <a href="https://pablomanjarres.com/oss/archgraph"><img src="https://img.shields.io/badge/Landing-pablo--oss-111111" alt="Landing page" /></a>
 </p>
 
 <p align="center">
@@ -170,7 +170,7 @@ MIT.
 ---
 
 <p align="center">
-  <a href="https://pablo-oss.vercel.app/archgraph">Landing</a>
+  <a href="https://pablomanjarres.com/oss/archgraph">Landing</a>
   &nbsp;·&nbsp;
   <a href="https://pablomanjarres.com/portfolio/projects/archgraph">Portfolio write-up</a>
   &nbsp;·&nbsp;
