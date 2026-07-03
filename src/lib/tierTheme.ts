@@ -79,3 +79,38 @@ export function getTierTheme(type: string): TierTheme {
 export function tierIndex(type: string): number {
   return getTierTheme(type).tier;
 }
+
+/**
+ * Visual language for a connection, shared by the layered (2D) and 3D views so
+ * a `sync` edge reads the same everywhere. Anchored on the blueprint palette:
+ * structural cyan is the confident backbone, amber the deferred/async flow,
+ * violet the pub/sub signal, and a pale steel line the quiet data pipe.
+ */
+export interface EdgeStyle {
+  /** Line colour (hex). */
+  stroke: string;
+  /** Stroke weight (px in 2D, drei lineWidth in 3D). */
+  strokeWidth: number;
+  /** Render as a dashed line. */
+  dashed: boolean;
+  /** Carry a travelling flow (marching ants in 2D / a pulse in 3D). */
+  animated: boolean;
+}
+
+const EDGE_STYLES: Record<string, EdgeStyle> = {
+  // Solid cyan backbone — a request/response call.
+  sync: { stroke: "#38BDF8", strokeWidth: 2.2, dashed: false, animated: false },
+  // Amber, dashed and flowing — a deferred / queued message.
+  async: { stroke: "#F5A524", strokeWidth: 2.0, dashed: true, animated: true },
+  // Violet, fine dashes and flowing — a fire-and-forget event / pub-sub.
+  event: { stroke: "#C084FC", strokeWidth: 1.8, dashed: true, animated: true },
+  // Pale steel pipe, solid and heavier — a bulk data / storage link.
+  data: { stroke: "#93C5FD", strokeWidth: 2.6, dashed: false, animated: false },
+};
+
+const DEFAULT_EDGE_STYLE: EdgeStyle = EDGE_STYLES.sync;
+
+/** Blueprint styling for a connection type (falls back to the `sync` look). */
+export function edgeStyle(connType?: string | null): EdgeStyle {
+  return (connType && EDGE_STYLES[connType]) || DEFAULT_EDGE_STYLE;
+}

@@ -5,6 +5,7 @@ import {
   BackgroundVariant,
   Controls,
   Panel,
+  MarkerType,
   useNodesState,
   useEdgesState,
   useReactFlow,
@@ -13,16 +14,16 @@ import {
   type Edge,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { nodeTypes } from "./nodes";
-import { edgeTypes } from "./edges/LabeledEdge";
+import { layeredNodeTypes, TIER_ICON } from "./nodes/TierCard";
+import { layeredEdgeTypes } from "./edges/BlueprintEdge";
 import { useGraphStore } from "../store/useGraphStore";
 import { modelToReactFlow } from "../lib/model-to-reactflow";
 import { layoutGraph } from "../lib/layout";
 import { EmptyState } from "./EmptyState";
-import { TIER_ORDER, getTierTheme, tierIndex } from "../lib/tierTheme";
+import { TIER_ORDER, getTierTheme, tierIndex, edgeStyle } from "../lib/tierTheme";
 
 // Approximate rendered card footprint, matching the ELK layout defaults.
-const NODE_W = 220;
+const NODE_W = 224;
 const NODE_H = 120;
 const BAND_PAD = 44;
 
@@ -40,10 +41,32 @@ interface Bounds {
   maxX: number;
 }
 
+/** Re-type ELK edges as blueprint edges: coloured arrowheads via edgeStyle. */
+function toBlueprintEdges(edges: Edge[]): Edge[] {
+  return edges.map((e) => {
+    const es = edgeStyle(
+      (e.data?.type ?? e.data?.connectionType) as string | undefined,
+    );
+    return {
+      ...e,
+      type: "blueprintEdge",
+      // Flow is handled by BlueprintEdge's own class, not ReactFlow's dashdraw.
+      animated: false,
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+        color: es.stroke,
+        width: 16,
+        height: 16,
+      },
+    };
+  });
+}
+
 /**
- * Premium 2D renderer: the flat node/edge set laid out into architectural
- * tiers (actors on top → data stores at the bottom) over translucent,
- * viewport-tracked tier lanes.
+ * Premium 2D "blueprint" renderer: the flat object set laid out into
+ * architectural tiers (people on top → data stores at the bottom) over a navy
+ * drafting sheet, with tier-aware cards, typed/animated edges and depth-shaded
+ * tier lanes. Selection is shared with the flat and 3D views.
  */
 export function LayeredCanvas() {
   const model = useGraphStore((s) => s.model);
@@ -70,6 +93,7 @@ export function LayeredCanvas() {
       model,
       diagram,
     );
+    const blueprintEdges = toBlueprintEdges(rawEdges);
 
     // Tiers replace group containers, so flatten: drop group backdrops and
     // detach any parent relationships before the tiered layout.
@@ -81,7 +105,7 @@ export function LayeredCanvas() {
       .then((laidOut) => {
         if (cancelled) return;
         setNodes(laidOut);
-        setEdges(rawEdges);
+        setEdges(blueprintEdges);
         setBands(computeBands(laidOut));
         setBounds(computeBounds(laidOut));
         requestAnimationFrame(() => fitView({ padding: 0.2 }));
@@ -98,7 +122,7 @@ export function LayeredCanvas() {
           return { ...n, position: { x: col * 260, y: t * 220 } };
         });
         setNodes(fallback);
-        setEdges(rawEdges);
+        setEdges(blueprintEdges);
         setBands(computeBands(fallback));
         setBounds(computeBounds(fallback));
         requestAnimationFrame(() => fitView({ padding: 0.2 }));
@@ -120,12 +144,10 @@ export function LayeredCanvas() {
   if (error) return <EmptyState message={error} />;
   if (!model) return <EmptyState message="Loading model..." />;
 
-  const activeTiers = TIER_ORDER.filter((t) =>
-    bands.some((b) => b.type === t),
-  );
+  const activeTiers = TIER_ORDER.filter((t) => bands.some((b) => b.type === t));
 
   return (
-    <div className="relative w-full h-full bg-[#181818]">
+    <div className="blueprint relative h-full w-full bg-[#0A1626]">
       <TierLanes bands={bands} bounds={bounds} />
       <ReactFlow
         nodes={nodes}
@@ -134,36 +156,49 @@ export function LayeredCanvas() {
         onEdgesChange={onEdgesChange}
         onNodeClick={onNodeClick}
         onPaneClick={onPaneClick}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
+        nodeTypes={layeredNodeTypes}
+        edgeTypes={layeredEdgeTypes}
         proOptions={{ hideAttribution: true }}
         minZoom={0.1}
         maxZoom={2}
         style={{ backgroundColor: "transparent" }}
       >
+        {/* Faint cyan drafting grid — minor cells + heavier section lines. */}
         <Background
-          variant={BackgroundVariant.Dots}
-          gap={22}
-          size={1}
-          color="#2a2a2a"
+          id="bp-grid-minor"
+          variant={BackgroundVariant.Lines}
+          gap={28}
+          lineWidth={1}
+          color="rgba(56, 189, 248, 0.05)"
+        />
+        <Background
+          id="bp-grid-major"
+          variant={BackgroundVariant.Lines}
+          gap={140}
+          lineWidth={1}
+          color="rgba(56, 189, 248, 0.12)"
         />
         <Controls position="bottom-left" />
         {activeTiers.length > 0 && (
           <Panel position="top-left">
-            <div className="rounded-lg border border-[#333] bg-[#1e1e1e]/90 backdrop-blur px-3 py-2 shadow-xl">
-              <div className="text-[10px] uppercase tracking-wider text-neutral-500 mb-1.5">
-                Tiers
+            <div className="rounded-lg border border-cyan-400/20 bg-[#0b1a2c]/90 px-3 py-2 shadow-xl backdrop-blur">
+              <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-cyan-300/80">
+                <span className="inline-block h-1.5 w-1.5 rounded-sm bg-cyan-400" />
+                Architecture tiers
               </div>
               <div className="flex flex-col gap-1">
                 {activeTiers.map((t) => {
                   const theme = getTierTheme(t);
+                  const Icon = TIER_ICON[t];
                   return (
                     <div key={t} className="flex items-center gap-2">
                       <span
-                        className="w-2.5 h-2.5 rounded-sm"
-                        style={{ backgroundColor: theme.color }}
-                      />
-                      <span className="text-xs text-neutral-300">
+                        className="flex h-4 w-4 items-center justify-center rounded"
+                        style={{ background: `${theme.color}22` }}
+                      >
+                        {Icon && <Icon size={11} style={{ color: theme.color }} />}
+                      </span>
+                      <span className="text-xs text-slate-300">
                         {theme.label}
                       </span>
                     </div>
@@ -174,11 +209,19 @@ export function LayeredCanvas() {
           </Panel>
         )}
       </ReactFlow>
+      {/* Vignette for drafting-sheet depth. */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(125% 95% at 50% 38%, transparent 55%, rgba(3, 9, 18, 0.6) 100%)",
+        }}
+      />
     </div>
   );
 }
 
-/** Translucent tier bands + pinned labels, tracking the flow viewport. */
+/** Depth-shaded tier bands + pinned, iconed labels, tracking the viewport. */
 function TierLanes({ bands, bounds }: { bands: TierBand[]; bounds: Bounds }) {
   const { x, y, zoom } = useViewport();
   if (bands.length === 0) return null;
@@ -187,10 +230,10 @@ function TierLanes({ bands, bounds }: { bands: TierBand[]; bounds: Bounds }) {
   const width = bounds.maxX - bounds.minX + 8000;
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
       {/* Scaled fills, aligned to the flow coordinate system. */}
       <div
-        className="absolute top-0 left-0"
+        className="absolute left-0 top-0"
         style={{
           transform: `translate(${x}px, ${y}px) scale(${zoom})`,
           transformOrigin: "0 0",
@@ -205,28 +248,37 @@ function TierLanes({ bands, bounds }: { bands: TierBand[]; bounds: Bounds }) {
               width,
               top: b.yStart,
               height: b.yEnd - b.yStart,
-              background: `linear-gradient(90deg, ${b.band} 0%, transparent 55%)`,
-              borderTop: `1px solid ${b.color}33`,
+              background: `linear-gradient(180deg, ${b.color}16 0%, transparent 24%, transparent 76%, ${b.color}0e 100%), linear-gradient(90deg, ${b.band} 0%, ${b.color}0a 32%, transparent 64%)`,
+              borderTop: `1px solid ${b.color}45`,
+              boxShadow: `inset 0 1px 0 ${b.color}26`,
             }}
           />
         ))}
       </div>
       {/* Fixed-size labels tracking each band's top edge. */}
       <div className="absolute inset-0">
-        {bands.map((b) => (
-          <div
-            key={b.type}
-            className="absolute left-3"
-            style={{ top: b.yStart * zoom + y + 6 }}
-          >
-            <span
-              className="text-[11px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded"
-              style={{ color: b.color, backgroundColor: `${b.color}18` }}
+        {bands.map((b) => {
+          const Icon = TIER_ICON[b.type];
+          return (
+            <div
+              key={b.type}
+              className="absolute left-3"
+              style={{ top: b.yStart * zoom + y + 6 }}
             >
-              {b.label}
-            </span>
-          </div>
-        ))}
+              <span
+                className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 text-[11px] font-semibold uppercase tracking-widest"
+                style={{
+                  color: b.color,
+                  backgroundColor: `${b.color}1c`,
+                  boxShadow: `inset 0 0 0 1px ${b.color}30`,
+                }}
+              >
+                {Icon && <Icon size={12} />}
+                {b.label}
+              </span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

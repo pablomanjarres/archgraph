@@ -87,6 +87,9 @@ export function modelToReactFlow(
       type: "labeledEdge",
       data: {
         label: conn.label,
+        // `type` is the blueprint edge-style key (sync|async|event|data);
+        // `connectionType` is kept for backwards-compatible consumers.
+        type: conn.type,
         connectionType: conn.type,
         status: conn.status,
       },

@@ -53,3 +53,44 @@ body {
 .react-flow__controls-button:hover {
   background-color: #333 !important;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Blueprint (layered) view
+   ───────────────────────────────────────────────────────────── */
+
+/* Travelling flow for async / event edges — marching cyan/amber ants. */
+@keyframes bp-edge-flow {
+  to {
+    stroke-dashoffset: -22;
+  }
+}
+.bp-edge-flow {
+  stroke-dasharray: 7 6;
+  animation: bp-edge-flow 0.55s linear infinite;
+}
+
+/* Soft draw-in for edges + cards when the diagram (re)mounts. */
+@keyframes bp-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Navy, cyan-lined controls to match the drafting aesthetic. */
+.blueprint .react-flow__controls {
+  background-color: #0d2033 !important;
+  border: 1px solid #1e3a5f !important;
+  box-shadow: 0 8px 24px rgba(2, 8, 18, 0.55) !important;
+}
+.blueprint .react-flow__controls-button {
+  background-color: #0d2033 !important;
+  border-color: #163150 !important;
+  fill: #cbd5e1 !important;
+}
+.blueprint .react-flow__controls-button:hover {
+  background-color: #16324f !important;
+  fill: #7dd3fc !important;
+}
