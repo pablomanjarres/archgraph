@@ -17,31 +17,26 @@
   {
     "id": "lumen-frontier",
     "name": "Lumen Frontier",
-    "description": "C4 model of Lumen Frontier — an Astro + React islands learning front-end (LumenOS widget dashboard + Lumenverse 3D explorer) with a scaffolded FastAPI backend."
+    "description": "C4 model of Lumen Frontier \u2014 an Astro + React islands learning front-end (LumenOS widget dashboard + Lumenverse 3D explorer) with a scaffolded FastAPI backend."
   },
   {
     "id": "forge",
     "name": "Forge",
-    "description": "C4 model of Forge — a macOS Electron AI orchestration center for media generation, agents, and Remotion demo videos."
+    "description": "C4 model of Forge \u2014 a macOS Electron AI orchestration center for media generation, agents, and Remotion demo videos."
   },
   {
     "id": "cortex",
     "name": "Cortex",
-    "description": "Private encrypted macOS desktop dashboard unifying a founder's habits, metrics, CRM, calendar and GTM — read/written by Claude via a 51-tool MCP server."
+    "description": "Private encrypted macOS desktop dashboard unifying a founder's habits, metrics, CRM, calendar and GTM \u2014 read/written by Claude via a 51-tool MCP server."
   },
   {
     "id": "omegahack",
     "name": "OmegaHack (CAROL)",
-    "description": "Multi-agent PQRSD platform for the Alcaldia de Medellin — intake, PII redaction, Claude classification, legal-deadline routing and transparency."
+    "description": "Multi-agent PQRSD platform for the Alcaldia de Medellin \u2014 intake, PII redaction, Claude classification, legal-deadline routing and transparency."
   },
   {
     "id": "band-of-agents",
     "name": "Band of Agents",
     "description": "Multi-agent marketing content review board where competing reviewer agents negotiate a verdict in a Band room and escalate deadlocks to a human."
-  },
-  {
-    "id": "noelle",
-    "name": "Noelle",
-    "description": "C4 model of Noelle — an AI agent org-chart product whose growth-intern agents discover, draft, and queue social replies for human approval."
   }
 ]
