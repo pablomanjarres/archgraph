@@ -6,18 +6,23 @@ import type {
   Diagram,
 } from "../types/model";
 
+/** How the active diagram is rendered. */
+export type ViewMode = "flat" | "layered" | "3d";
+
 interface GraphState {
   model: ArchGraphModel | null;
   error: string | null;
   selectedObjectId: string | null;
   activeDiagramId: string | null;
   showMinimap: boolean;
+  viewMode: ViewMode;
 
   setModel: (model: ArchGraphModel) => void;
   setError: (error: string) => void;
   selectObject: (id: string | null) => void;
   setActiveDiagram: (id: string | null) => void;
   toggleMinimap: () => void;
+  setViewMode: (mode: ViewMode) => void;
   reset: () => void;
 
   // Derived helpers
@@ -32,6 +37,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   selectedObjectId: null,
   activeDiagramId: null,
   showMinimap: false,
+  viewMode: "layered",
 
   setModel: (model) =>
     set({
@@ -43,6 +49,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   selectObject: (id) => set({ selectedObjectId: id }),
   setActiveDiagram: (id) => set({ activeDiagramId: id }),
   toggleMinimap: () => set((s) => ({ showMinimap: !s.showMinimap })),
+  setViewMode: (mode) => set({ viewMode: mode }),
   reset: () =>
     set({
       model: null,

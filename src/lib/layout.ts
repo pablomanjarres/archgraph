@@ -1,5 +1,6 @@
 import ELK from "elkjs/lib/elk.bundled.js";
 import type { Node, Edge } from "@xyflow/react";
+import { tierIndex } from "./tierTheme";
 
 const elk = new ELK();
 
@@ -7,10 +8,23 @@ const DEFAULT_NODE_WIDTH = 240;
 const DEFAULT_NODE_HEIGHT = 120;
 const GROUP_PADDING = 60;
 
+export interface LayoutOptions {
+  /**
+   * When true, nodes are partitioned into architectural tiers and laid out
+   * top-to-bottom (actors on top, data stores at the bottom). Used by the
+   * layered (premium 2D) view. Callers should pass a flat, group-free node
+   * list for tiered layout so every node participates in the partitioning.
+   */
+  tiered?: boolean;
+}
+
 export async function layoutGraph(
   nodes: Node[],
   edges: Edge[],
+  opts: LayoutOptions = {},
 ): Promise<Node[]> {
+  const { tiered = false } = opts;
+
   const parentIds = new Set(
     nodes.filter((n) => n.data.isGroup).map((n) => n.id),
   );
@@ -22,6 +36,13 @@ export async function layoutGraph(
     if (!node.data.isGroup) {
       base.width = node.width ?? DEFAULT_NODE_WIDTH;
       base.height = node.height ?? DEFAULT_NODE_HEIGHT;
+
+      if (tiered) {
+        // Pin each node into the layer matching its architectural tier.
+        base.layoutOptions = {
+          "elk.partitioning.partition": String(tierIndex(node.data.type as string)),
+        };
+      }
     }
 
     if (parentIds.has(node.id)) {
@@ -55,13 +76,16 @@ export async function layoutGraph(
     id: "root",
     layoutOptions: {
       "elk.algorithm": "layered",
-      "elk.direction": "RIGHT",
+      "elk.direction": tiered ? "DOWN" : "RIGHT",
       "elk.spacing.nodeNode": "60",
-      "elk.layered.spacing.nodeNodeBetweenLayers": "80",
+      "elk.layered.spacing.nodeNodeBetweenLayers": tiered ? "130" : "80",
       "elk.padding": `[top=${GROUP_PADDING},left=${GROUP_PADDING},bottom=${GROUP_PADDING},right=${GROUP_PADDING}]`,
       "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-      "elk.separateConnectedComponents": "true",
+      // Tiers already group the graph; keeping components together avoids
+      // ELK splitting a tier into disconnected islands.
+      "elk.separateConnectedComponents": tiered ? "false" : "true",
       "elk.aspectRatio": "2.5",
+      ...(tiered ? { "elk.partitioning.activate": "true" } : {}),
     },
     children: topLevel,
     edges: edges.map((edge) => ({
